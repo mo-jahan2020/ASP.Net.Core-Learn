@@ -52,7 +52,7 @@ app.MapGet("int", async context =>
     }
 });
 
-app.MapGet("/", () => Results.Redirect("/string"));
+//app.MapGet("/", () => Results.Redirect("/string"));
 
 //http://localhost:5000/  // Hello World ID :0
 //http://localhost:5000/121212  //Hello World ID :121212
