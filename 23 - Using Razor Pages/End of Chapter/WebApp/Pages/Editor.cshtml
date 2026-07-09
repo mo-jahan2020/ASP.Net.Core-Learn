@@ -1,7 +1,16 @@
-﻿@page "{id:long}"
+@* =============================================================================
+    فایل Pages/Editor.cshtml — Razor Page ویرایش محصول (فرم)
+    =============================================================================
+    "{id:long}": پارامتر مسیر اجباری از نوع long.
+    Layout = null: بدون Layout — صفحه مستقل.
+    @Html.AntiForgeryToken(): تولید توکن CSRF برای محافظت فرم.
+      بدون این خط، فرم POST در برابر حملات CSRF آسیب‌پذیر خواهد بود.
+    ============================================================================= *@
+
+@page "{id:long}"
 @model EditorModel
 @{ 
-    Layout = null;
+    Layout = null; @* بدون Layout — این صفحه Layout مستقل دارد *@
 }
 
 <!DOCTYPE html>
@@ -18,8 +27,9 @@
                 <tr><th>Price</th><td>@Model.Product?.Price</td></tr>
             </tbody>
         </table>
+        @* فرم POST برای ویرایش قیمت *@
         <form method="post">
-            @Html.AntiForgeryToken()
+            @Html.AntiForgeryToken() @* توکن CSRF — جلوگیری از حملات Cross-Site *@
             <div class="form-group">
                 <label>Price</label>
                 <input name="price" class="form-control" 

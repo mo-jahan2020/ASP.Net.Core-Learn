@@ -1,4 +1,6 @@
 {
+  // فایل libman.json — پیکربندی LibMan
+  // ⚠️ کامنت‌ها فقط برای آموزش.
   "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [

@@ -1,5 +1,17 @@
-﻿@page "{id:long?}"
+@* =============================================================================
+    فایل Pages/Index.cshtml — Razor Page اصلی
+    =============================================================================
+    @page: این فایل یک Razor Page است (مسیر: /Index).
+    "{id:long?}": پارامتر مسیر اختیاری از نوع long.
+    @model: مشخص می‌کند PageModel کدام کلاس است (Pages/Index.cshtml.cs).
+    @partial: رندر کردن Partial View با مدل مشخص.
+    ============================================================================= *@
+
+@page "{id:long?}"
 @model IndexModel
 
+@* نمایش نام محصول در یک div با کلاس Bootstrap *@
 <div class="bg-primary text-white text-center m-2 p-2">@Model.Product?.Name</div>
+
+@* رندر Partial View با مدل Product (فایل Pages/Shared/_ProductPartial.cshtml) *@
 <partial name="_ProductPartial" model="Model.Product" />

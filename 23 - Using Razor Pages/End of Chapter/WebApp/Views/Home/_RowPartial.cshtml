@@ -1,6 +1,13 @@
-﻿@model Product
+@* =============================================================================
+    فایل Views/Home/_RowPartial.cshtml — Partial View ردیفی
+    =============================================================================
+    <partial for="Name">: ارسال Model.Name به _CellPartial (ایمن‌تر).
+    ============================================================================= *@
+
+@model Product
 
 <tr>
+    @* for="Name": معادل model="Model.Name" اما نوع‌امن‌تر *@
     <partial name="_CellPartial" for="Name" />
     <td>@Model?.Price</td>
 </tr>

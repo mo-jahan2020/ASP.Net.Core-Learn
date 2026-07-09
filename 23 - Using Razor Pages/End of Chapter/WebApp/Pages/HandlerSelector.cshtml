@@ -1,4 +1,13 @@
-﻿@page
+@* =============================================================================
+    فایل Pages/HandlerSelector.cshtml — انتخاب Handler سفارشی در Razor Pages
+    =============================================================================
+    مفهوم Handler Selector:
+    - لینک "Standard": → OnGetAsync (handler پیش‌فرض)
+    - لینک "Related": → OnGetRelatedAsync (handler سفارشی با ?handler=related)
+    الگوی @functions: PageModel مستقیماً در فایل .cshtml تعریف می‌شود.
+    ============================================================================= *@
+
+@page
 @model HandlerSelectorModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using Microsoft.EntityFrameworkCore
@@ -19,7 +28,9 @@
                 <tr><th>Supplier</th><td>@Model.Product?.Supplier?.Name</td></tr>
             </tbody>
         </table>
+        @* لینک استاندارد → OnGetAsync *@
         <a href="/handlerselector" class="btn btn-primary">Standard</a>
+        @* لینک با handler سفارشی → OnGetRelatedAsync *@
         <a href="/handlerselector?handler=related" class="btn btn-primary">
             Related
         </a>
@@ -27,6 +38,7 @@
 </body>
 </html>
 
+@* الگوی @functions: تعریف PageModel مستقیماً در فایل .cshtml *@
 @functions{
 
     public class HandlerSelectorModel: PageModel {
@@ -38,10 +50,14 @@
             context = ctx;
         }
 
+        // Handler پیش‌فرض — فراخوانی با /handlerselector
         public async Task OnGetAsync(long id = 1) {
             Product = await context.Products.FindAsync(id);
         }
 
+        // Handler سفارشی — فراخوانی با /handlerselector?handler=related
+        // نام‌گذاری: OnGet + Related + Async
+        // Include: Eager Loading روابط Supplier و Category
         public async Task OnGetRelatedAsync(long id = 1) {
             Product = await context.Products
                 .Include(p => p.Supplier)

@@ -1,4 +1,11 @@
-﻿@page "/noid"
+@* =============================================================================
+    فایل Pages/NotFound.cshtml — صفحه "محصول یافت نشد"
+    =============================================================================
+    @page "/noid": مسیر سفارشی — از /noid قابل دسترسی است.
+    الگوی @functions: PageModel مستقیماً در فایل View تعریف شده.
+    ============================================================================= *@
+
+@page "/noid"
 @model NotFoundModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using WebApp.Models;
@@ -11,6 +18,7 @@
 </head>
 <body>
     <div class="bg-primary text-white text-center m-2 p-2">No Matching ID</div>
+    @* نمایش لیست همه محصولات به عنوان جایگزین *@
     <ul class="list-group m-2">
         @foreach (Product p in Model.Products) {
             <li class="list-group-item">@p.Name (ID: @p.ProductId)</li>                
@@ -20,10 +28,10 @@
 </html>
 
 @functions {
-
     public class NotFoundModel: PageModel {
         private DataContext context;
 
+        // لیست محصولات برای نمایش به کاربر
         public IEnumerable<Product> Products { get; set; } 
             = Enumerable.Empty<Product>();
 
@@ -31,6 +39,7 @@
             context = ctx;
         }
 
+        // بارگذاری همه محصولات
         public void OnGetAsync(long id = 1) {
             Products = context.Products;
         }

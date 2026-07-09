@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
+@* =============================================================================
+    فایل Views/Shared/_Layout.cshtml — Layout پیش‌فرض MVC
+    =============================================================================
+    مفاهیم پیشرفته:
+    - @RenderSection: بخش‌های اختیاری Header و Footer
+    - @RenderBody(): محتوای اصلی View
+    - IsSectionDefined: بررسی وجود یک Section
+    ============================================================================= *@
 <html>
 <head>
     <title>@ViewBag.Title</title>
@@ -10,22 +18,26 @@
             <thead>
                 <tr>
                     <th class="bg-primary text-white text-center" colspan="2">
+                        @* RenderSection: رندر بخش Header (اختیاری) *@
                         @RenderSection("Header", false)
                     </th>
                 </tr>
             </thead>
             <tbody>
+                @* محتوای اصلی View اینجا رندر می‌شود *@
                 @RenderBody()
             </tbody>
             <tfoot>
                 <tr>
                     <th class="bg-primary text-white text-center" colspan="2">
+                        @* بخش Footer — اختیاری *@
                         @RenderSection("Footer", false)
                     </th>
                 </tr>
             </tfoot>
         </table>
     </div>
+    @* بررسی وجود بخش Summary — محتوای پیش‌فرض اگر نباشد *@
     @if (IsSectionDefined("Summary")) {
         @RenderSection("Summary", false)
     } else { 

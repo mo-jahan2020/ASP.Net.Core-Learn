@@ -1,4 +1,6 @@
-﻿{
+{
+  // فایل launchSettings.json — تنظیمات اجرا و Debug
+  // ⚠️ کامنت‌ها فقط برای آموزش.
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,

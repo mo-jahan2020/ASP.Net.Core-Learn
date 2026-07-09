@@ -1,4 +1,12 @@
-﻿@model Product
+@* =============================================================================
+    فایل Views/Home/Watersports.cshtml — مثال switch و data attribute
+    =============================================================================
+    @switch: دستور شرطی چندگانه در Razor.
+    @:: نوشتن متن مستقیم در switch.
+    data-id: ویژگی HTML سفارشی برای JavaScript.
+    ============================================================================= *@
+
+@model Product
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +19,7 @@
                data-id="@Model?.ProductId">
             <tbody>
                 <tr><th>Name</th><td>
+                    @* @switch: جایگزینی Razor برای switch C# *@
                     @switch (Model?.Name) {
                         case "Kayak":
                             @:Small Boat
@@ -24,6 +33,7 @@
                     }
                 </td></tr>
                 <tr><th>Price</th><td>@Model?.Price.ToString("c")</td></tr>
+                @* دو روش نوشتن عبارت C# در Razor *@
                 <tr><th>Tax</th><td>@Model?.Price * 0.2m</td></tr>
                 <tr><th>Tax</th><td>@(Model?.Price * 0.2m)</td></tr>
             </tbody>
