@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00-Kodam-ASP.NET.Coe-MVC", "00-Kodam-ASP.NET.Coe-MVC.csproj", "{89B64BE4-3FCE-4B47-A97E-4FB6FB15CDAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89B64BE4-3FCE-4B47-A97E-4FB6FB15CDAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B64BE4-3FCE-4B47-A97E-4FB6FB15CDAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B64BE4-3FCE-4B47-A97E-4FB6FB15CDAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B64BE4-3FCE-4B47-A97E-4FB6FB15CDAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72972AE4-729F-44E8-9BFB-4F3BCD018448}
+	EndGlobalSection
+EndGlobal

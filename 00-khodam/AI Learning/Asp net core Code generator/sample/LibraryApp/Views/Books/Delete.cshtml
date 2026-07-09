@@ -1,0 +1,26 @@
+@* صفحه تایید حذف *@
+@model LibraryApp.Models.Book
+@{
+    ViewData["Title"] = "حذف کتاب";
+}
+
+<div class="card shadow-sm border-danger">
+    <div class="card-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle"></i> تایید حذف
+    </div>
+    <div class="card-body">
+        <h5 class="text-danger">آیا از حذف این کتاب اطمینان دارید؟</h5>
+        <dl class="row mt-3">
+            <dt class="col-sm-3">عنوان</dt><dd class="col-sm-9">@Model.Title</dd>
+            <dt class="col-sm-3">نویسنده</dt><dd class="col-sm-9">@Model.Author</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> بله، حذف کن
+            </button>
+            <a class="btn btn-secondary" asp-action="Index">انصراف</a>
+        </form>
+    </div>
+</div>

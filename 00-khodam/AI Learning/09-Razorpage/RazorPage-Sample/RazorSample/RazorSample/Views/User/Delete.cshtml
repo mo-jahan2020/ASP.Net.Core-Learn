@@ -1,0 +1,99 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/User/Delete.cshtml
+   هدف: صفحه تأیید حذف — قبل از حذف واقعی از کاربر تأیید می‌گیریم
+
+   📌 الگوی Post-Redirect-Get (PRG):
+      ۱. GET /User/Delete/5 → نمایش این صفحه تأیید
+      ۲. POST /User/Delete/5 → حذف واقعی در Controller
+      ۳. RedirectToAction(Index) → بازگشت به لیست
+
+      این الگو از ارسال مجدد فرم هنگام Refresh جلوگیری می‌کند
+
+   📌 چرا حذف باید POST باشد؟
+      اگر حذف با GET انجام شود، یک ربات یا کاربر بدخواه می‌تواند
+      با ارسال لینک‌های ساده همه رکوردها را حذف کند.
+      POST به همراه AntiForgeryToken امنیت بیشتری دارد.
+   ════════════════════════════════════════════════════════════════ *@
+
+@model RazorSample.Models.UserInputModel
+
+@{
+    ViewData["Title"] = "حذف کاربر";
+}
+
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-trash me-2 text-danger"></i>حذف کاربر</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/User">لیست کاربران</a></li>
+                <li class="breadcrumb-item active">حذف کاربر</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="card form-card">
+    <div class="card-body p-4">
+
+        @* ── جعبه هشدار ── *@
+        @* کلاس delete-box در _Layout.cshtml تعریف شده با رنگ قرمز کمرنگ *@
+        <div class="delete-box mb-4">
+            <div class="delete-icon mb-3">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <h5 class="fw-bold text-danger mb-2">آیا مطمئن هستید؟</h5>
+            <p class="text-muted mb-0">
+                @* نام کاربر را در پیام هشدار نشان می‌دهیم *@
+                کاربر <strong>@Model.Name @Model.Family</strong> به طور دائم حذف خواهد شد
+                و این عمل قابل بازگشت نیست.
+            </p>
+        </div>
+
+        @* ── خلاصه اطلاعات کاربر — برای اطمینان کاربر ── *@
+        <div class="card bg-light border-0 mb-4">
+            <div class="card-body">
+                <div class="row g-2 text-sm">
+                    <div class="col-6">
+                        <span class="text-muted">نام:</span>
+                        <strong class="me-2">@Model.Name @Model.Family</strong>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">ایمیل:</span>
+                        <strong class="me-2" dir="ltr">@Model.Email</strong>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">تلفن:</span>
+                        <strong class="me-2" dir="ltr">@Model.Tel</strong>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted">شهر:</span>
+                        <strong class="me-2">@Model.City</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ── فرم تأیید حذف ── *@
+        @* asp-action="Delete" → به متد Delete(POST) در Controller می‌رود *@
+        <form asp-action="Delete" method="post">
+            @Html.AntiForgeryToken()
+
+            @* ارسال Id کاربر به Controller — فیلد نامرئی *@
+            @* Controller نیاز دارد بداند کدام کاربر را حذف کند *@
+            <input name="id" type="hidden" value="@Model.Id" />
+
+            <div class="d-flex gap-2">
+                @* دکمه تأیید حذف — type="submit" فرم را ارسال می‌کند *@
+                <button type="submit" class="btn btn-danger fw-semibold px-4">
+                    <i class="bi bi-trash me-1"></i>بله، حذف شود
+                </button>
+
+                @* دکمه انصراف — کاربر را بدون حذف به صفحه جزئیات می‌برد *@
+                <a href="/User/Details/@Model.Id" class="btn btn-outline-secondary-custom">
+                    <i class="bi bi-x me-1"></i>انصراف
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@* ----------------------------------------------------------------------------
+   View حذف محصول (Views/Products/Delete.cshtml)
+   ----------------------------------------------------------------------------
+   این View برای تأیید حذف است. فرم به اکشن DeleteConfirmed ارسال می‌شود
+   (که با [ActionName("Delete")] به URL /Delete پاسخ می‌دهد).
+   ---------------------------------------------------------------------------- *@
+
+@model Product
+@{
+    ViewData["Title"] = "حذف محصول";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-danger shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">تأیید حذف محصول</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>هشدار!</strong> آیا از حذف این محصول مطمئن هستید؟
+                    این عملیات قابل بازگشت نیست.
+                </div>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th style="width: 30%;">شناسه:</th>
+                        <td>@Model.ProductID</td>
+                    </tr>
+                    <tr>
+                        <th>نام:</th>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <th>دسته‌بندی:</th>
+                        <td>@Model.Category</td>
+                    </tr>
+                    <tr>
+                        <th>قیمت:</th>
+                        <td>@Model.Price.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>توضیحات:</th>
+                        <td>@Model.Description</td>
+                    </tr>
+                </table>
+
+                <form asp-controller="Products" asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="ProductID" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">بله، حذف کن</button>
+                        <a asp-controller="Products" asp-action="Details"
+                           asp-route-id="@Model.ProductID" class="btn btn-info text-white">جزئیات</a>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

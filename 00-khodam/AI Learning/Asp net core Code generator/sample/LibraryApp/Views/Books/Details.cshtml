@@ -1,0 +1,37 @@
+@* نمایش جزئیات یک کتاب *@
+@model LibraryApp.Models.Book
+@{
+    ViewData["Title"] = "جزئیات کتاب";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <i class="bi bi-info-circle"></i> جزئیات کتاب
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Title)</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Author)</dt>
+            <dd class="col-sm-9">@Model.Author</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ISBN)</dt>
+            <dd class="col-sm-9">@(Model.ISBN ?? "—")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.PublishYear)</dt>
+            <dd class="col-sm-9">@(Model.PublishYear?.ToString() ?? "—")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Description)</dt>
+            <dd class="col-sm-9">@(Model.Description ?? "—")</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(m => m.CreatedAt)</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</dd>
+        </dl>
+
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="bi bi-pencil"></i> ویرایش
+        </a>
+        <a class="btn btn-secondary" asp-action="Index">بازگشت به لیست</a>
+    </div>
+</div>

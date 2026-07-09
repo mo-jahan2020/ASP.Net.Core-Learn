@@ -1,0 +1,133 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/User/Create.cshtml
+   هدف: فرم ایجاد کاربر جدید با اعتبارسنجی دو طرفه
+
+   📌 Tag Helpers چیست؟
+      ویژگی‌هایی مانند asp-for، asp-action، asp-validation-for
+      که توسط ASP.NET Core پردازش می‌شوند و HTML مناسب تولید می‌کنند.
+
+   📌 asp-for چطور کار می‌کند؟
+      <input asp-for="Name"> تبدیل می‌شود به:
+      <input type="text" id="Name" name="Name" value="...">
+      به علاوه ویژگی‌های اعتبارسنجی HTML5 را هم اضافه می‌کند
+
+   📌 اعتبارسنجی دو مرحله‌ای:
+      ۱. Client-side: مرورگر با JavaScript بدون ارسال به سرور چک می‌کند
+      ۲. Server-side: سرور C# هم بررسی می‌کند (امنیت بیشتر)
+   ════════════════════════════════════════════════════════════════ *@
+
+@* نوع Model — یک کاربر واحد (نه لیست) *@
+@model RazorSample.Models.UserInputModel
+
+@{
+    ViewData["Title"] = "افزودن کاربر جدید";
+}
+
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-person-plus me-2 text-primary"></i>افزودن کاربر جدید</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/User">لیست کاربران</a></li>
+                <li class="breadcrumb-item active">افزودن کاربر</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="card form-card">
+    <div class="card-header-custom">
+        <i class="bi bi-person-vcard"></i>
+        <span>اطلاعات کاربر</span>
+    </div>
+    <div class="card-body p-4">
+
+        @* ── فرم ── *@
+        @* asp-action="Create" → فرم را به Action مناسب در Controller ارسال می‌کند *@
+        @* method="post" → از HTTP POST استفاده می‌کند (نه GET) *@
+        <form asp-action="Create" method="post">
+
+            @* Token امنیتی ضد CSRF — باید در همه فرم‌های POST باشد *@
+            @* این یک فیلد hidden تولید می‌کند که سرور آن را بررسی می‌کند *@
+            @Html.AntiForgeryToken()
+
+            @* ── ردیف اول: نام و نام خانوادگی ── *@
+            @* کلاس‌های Bootstrap: row = ردیف، g-3 = فاصله بین ستون‌ها، col-md-6 = نصف عرض در Desktop *@
+            <div class="row g-3">
+                <div class="col-md-6">
+                    @* asp-for="Name" → Label را به صورت خودکار از [Display(Name="نام")] پر می‌کند *@
+                    <label asp-for="Name" class="form-label"></label>
+                    @* asp-for در input → name، id و اعتبارسنجی HTML5 را تنظیم می‌کند *@
+                    <input asp-for="Name" class="form-control" placeholder="نام را وارد کنید" />
+                    @* asp-validation-for → پیام خطای اعتبارسنجی را نمایش می‌دهد *@
+                    <span asp-validation-for="Name" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Family" class="form-label"></label>
+                    <input asp-for="Family" class="form-control" placeholder="نام خانوادگی را وارد کنید" />
+                    <span asp-validation-for="Family" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                @* ── ردیف دوم: تاریخ تولد و شهر ── *@
+                <div class="col-md-6">
+                    <label asp-for="BirthDate" class="form-label"></label>
+                    @* type="date" → مرورگر یک تقویم نشان می‌دهد *@
+                    <input asp-for="BirthDate" class="form-control" type="date" />
+                    <span asp-validation-for="BirthDate" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" placeholder="نام شهر را وارد کنید" />
+                    <span asp-validation-for="City" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                @* ── ردیف سوم: ایمیل — تمام عرض (col-12) ── *@
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label"></label>
+                    @* dir="ltr" → ایمیل را چپ به راست نشان می‌دهد (استاندارد ایمیل) *@
+                    <input asp-for="Email" class="form-control" placeholder="example@email.com" dir="ltr" />
+                    <span asp-validation-for="Email" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                @* ── ردیف چهارم: تلفن ── *@
+                <div class="col-md-6">
+                    <label asp-for="Tel" class="form-label"></label>
+                    @* maxlength="11" → کاربر نمی‌تواند بیشتر از ۱۱ کاراکتر وارد کند *@
+                    <input asp-for="Tel" class="form-control" placeholder="09xxxxxxxxx" dir="ltr" maxlength="11" />
+                    <span asp-validation-for="Tel" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                @* ── ردیف پنجم: آدرس — textarea چون متن طولانی است ── *@
+                <div class="col-12">
+                    <label asp-for="Address" class="form-label"></label>
+                    @* textarea برای متن چندخطی — rows="3" ارتفاع اولیه را مشخص می‌کند *@
+                    <textarea asp-for="Address" class="form-control" rows="3" placeholder="آدرس کامل را وارد کنید"></textarea>
+                    <span asp-validation-for="Address" class="invalid-feedback d-block text-danger"></span>
+                </div>
+            </div>
+
+            @* ── دکمه‌های عملیات ── *@
+            <div class="d-flex gap-2 mt-4 pt-3 border-top">
+                @* type="submit" → فرم را ارسال می‌کند → Controller.Create(POST) فراخوانی می‌شود *@
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="bi bi-check-lg me-1"></i>ذخیره کاربر
+                </button>
+                @* دکمه انصراف — کاربر را بدون ذخیره به لیست بر می‌گرداند *@
+                <a href="/User" class="btn btn-outline-secondary-custom">
+                    <i class="bi bi-x-lg me-1"></i>انصراف
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* ── اسکریپت‌های اعتبارسنجی سمت کلاینت ── *@
+@* این بخش فقط در همین صفحه اضافه می‌شود (نه در همه صفحات) *@
+@* @section → یک ناحیه از Layout را پر می‌کند *@
+@section Scripts {
+    @* Partial View — یک فایل View کوچک که داخل View دیگری استفاده می‌شود *@
+    @* این فایل jQuery Validation را بارگذاری می‌کند *@
+    <partial name="_ValidationScriptsPartial" />
+}

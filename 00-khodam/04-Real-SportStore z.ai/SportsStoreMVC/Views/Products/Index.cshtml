@@ -1,0 +1,137 @@
+@* ----------------------------------------------------------------------------
+   View لیست محصولات (Views/Products/Index.cshtml)
+   ----------------------------------------------------------------------------
+   - نمایش محصولات به صورت Grid (کارت‌های Bootstrap)
+   - دارای Pagination (صفحه‌بندی)
+   - امکان فیلتر بر اساس دسته‌بندی
+   - هر کارت دارای دکمه‌های جزئیات، افزودن به سبد، و برای Admin: ویرایش/حذف
+
+   در MVC:
+   - @model ProductsListViewModel: مدل دریافت شده از Controller
+   - asp-controller="Cart" asp-action="Add": لینک به اکشن Add در CartController
+   ---------------------------------------------------------------------------- *@
+
+@model ProductsListViewModel
+@{
+    ViewData["Title"] = "محصولات";
+    var categories = ViewBag.Categories as IEnumerable<string> ?? Enumerable.Empty<string>();
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h1 class="mb-0">محصولات</h1>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Products" asp-action="Create" class="btn btn-success">
+                + افزودن محصول جدید
+            </a>
+        }
+    </div>
+</div>
+
+@* --- فیلتر دسته‌بندی --- *@
+<div class="mb-4">
+    <div class="btn-group flex-wrap" role="group">
+        <a asp-controller="Products" asp-action="Index"
+           class="btn btn-outline-primary @(Model.CurrentCategory == null ? "active" : "")">
+            همه دسته‌ها
+        </a>
+        @foreach (var cat in categories)
+        {
+            <a asp-controller="Products" asp-action="Index"
+               asp-route-category="@cat" asp-route-productPage="1"
+               class="btn btn-outline-primary @(Model.CurrentCategory == cat ? "active" : "")">
+                @cat
+            </a>
+        }
+    </div>
+</div>
+
+@* --- نمایش محصولات به صورت Grid --- *@
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @foreach (var p in Model.Products)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm product-card">
+                @* --- تصویر محصول --- *@
+                @if (!string.IsNullOrEmpty(p.ImageUrl))
+                {
+                    <img src="@p.ImageUrl" class="product-image"
+                         alt="@p.Name"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                    <div class="product-image-placeholder" style="display:none;">
+                        <span>📦</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="product-image-placeholder">
+                        <span>📦</span>
+                    </div>
+                }
+
+                <div class="card-body">
+                    <h5 class="card-title">@p.Name</h5>
+                    <p class="card-text text-muted small mb-1">
+                        <span class="badge bg-secondary">@p.Category</span>
+                    </p>
+                    <p class="card-text small">@p.Description</p>
+                </div>
+
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="h5 mb-0 price">@p.Price.ToString("C")</span>
+                    </div>
+                    <div class="btn-group w-100" role="group">
+                        @* دکمه افزودن به سبد - با GET به Cart/Add?id=*@
+                        <a asp-controller="Cart" asp-action="Add"
+                           asp-route-id="@p.ProductID"
+                           asp-route-returnUrl="@ViewContext.HttpContext.Request.Path@ViewContext.HttpContext.Request.QueryString"
+                           class="btn btn-success btn-sm">
+                            افزودن به سبد
+                        </a>
+                        <a asp-controller="Products" asp-action="Details"
+                           asp-route-id="@p.ProductID"
+                           class="btn btn-info btn-sm text-white">
+                            جزئیات
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Products" asp-action="Edit"
+                               asp-route-id="@p.ProductID"
+                               class="btn btn-warning btn-sm">
+                                ویرایش
+                            </a>
+                            <a asp-controller="Products" asp-action="Delete"
+                               asp-route-id="@p.ProductID"
+                               class="btn btn-danger btn-sm">
+                                حذف
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Products.Any())
+{
+    <div class="alert alert-info text-center py-5">
+        <h4>هیچ محصولی یافت نشد</h4>
+        <p class="mb-0">در حال حاضر محصولی برای نمایش وجود ندارد.</p>
+    </div>
+}
+
+@* --- صفحه‌بندی --- *@
+@if (Model.PagingInfo.TotalPages > 1)
+{
+    <div class="mt-5">
+        @Html.PageLinks(
+                   Model.PagingInfo,
+                   page => Url.Action("Index", "Products",
+                       new { productPage = page, category = Model.CurrentCategory }))
+    </div>
+}

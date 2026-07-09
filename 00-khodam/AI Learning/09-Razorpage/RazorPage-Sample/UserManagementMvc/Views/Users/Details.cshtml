@@ -1,0 +1,46 @@
+@model UserDetailsViewModel
+
+@* این View فقط برای نمایش اطلاعات کاربر است و فرم ارسال ندارد. *@
+
+@{
+    ViewData["Title"] = "جزئیات کاربر";
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">جزئیات کاربر</h1>
+            <div class="d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">ویرایش</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">بازگشت</a>
+            </div>
+        </div>
+
+        @* dl / dt / dd برای نمایش لیستی از عنوان و مقدار مناسب است. *@
+        <dl class="row details-list">
+            <dt class="col-sm-3">شناسه</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">نام</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">نام خانوادگی</dt>
+            <dd class="col-sm-9">@Model.Family</dd>
+
+            <dt class="col-sm-3">تاریخ تولد</dt>
+            <dd class="col-sm-9">@Model.BirthDate?.ToString("yyyy/MM/dd")</dd>
+
+            <dt class="col-sm-3">شهر</dt>
+            <dd class="col-sm-9">@Model.City</dd>
+
+            <dt class="col-sm-3">آدرس</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+
+            <dt class="col-sm-3">ایمیل</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">شماره تلفن</dt>
+            <dd class="col-sm-9">@Model.Tel</dd>
+        </dl>
+    </div>
+</div>

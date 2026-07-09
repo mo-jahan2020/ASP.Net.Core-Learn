@@ -1,0 +1,130 @@
+@* ----------------------------------------------------------------------------
+   View ثبت سفارش (Views/Order/Create.cshtml)
+   ----------------------------------------------------------------------------
+   - فرم اطلاعات گیرنده
+   - خلاصه سفارش (سمت چپ)
+   - اگر کاربر قبلاً سفارش ثبت کرده، فرم به طور خودکار پر می‌شود
+   ---------------------------------------------------------------------------- *@
+
+@model SportsStore.Models.Order
+@{
+    ViewData["Title"] = "ثبت سفارش";
+    var cart = ViewBag.Cart as Cart;
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">اطلاعات گیرنده سفارش</h4>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Order" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">نام و نام خانوادگی</label>
+                        <input asp-for="Name" class="form-control" placeholder="نام گیرنده" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Line1" class="form-label">خط اول آدرس</label>
+                        <input asp-for="Line1" class="form-control" placeholder="شماره پلاک، خیابان" />
+                        <span asp-validation-for="Line1" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Line2" class="form-label">خط دوم آدرس (اختیاری)</label>
+                            <input asp-for="Line2" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Line3" class="form-label">خط سوم آدرس (اختیاری)</label>
+                            <input asp-for="Line3" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="City" class="form-label">شهر</label>
+                            <input asp-for="City" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="State" class="form-label">استان</label>
+                            <input asp-for="State" class="form-control" />
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Zip" class="form-label">کد پستی (اختیاری)</label>
+                            <input asp-for="Zip" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Country" class="form-label">کشور</label>
+                        <input asp-for="Country" class="form-control" />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="GiftWrap" class="form-check-input" />
+                        <label asp-for="GiftWrap" class="form-check-label">بسته‌بندی هدیه</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">ثبت سفارش</button>
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-secondary btn-lg">بازگشت به سبد</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @* --- خلاصه سفارش --- *@
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">خلاصه سفارش</h5>
+            </div>
+            <div class="card-body">
+                @if (cart?.Lines.Any() == true)
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var line in cart.Lines)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@line.Product.Name × @line.Quantity</span>
+                                <span class="text-success">
+                                    @((line.Product.Price * line.Quantity).ToString("C"))
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                    <div class="mt-3 pt-3 border-top d-flex justify-content-between">
+                        <strong>مجموع کل:</strong>
+                        <strong class="text-success">
+                            @cart.ComputeTotalValue().ToString("C")
+                        </strong>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning mb-0">
+                        سبد خرید شما خالی است. ابتدا محصولاتی را به سبد اضافه کنید.
+                    </div>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-primary mt-2">
+                        مشاهده محصولات
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

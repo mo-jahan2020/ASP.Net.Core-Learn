@@ -1,0 +1,25 @@
+@page "/Suppliers/Edit"
+@model Code_Generation1.Pages.Suppliers.EditModel
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<form method="post">
+	<input type="hidden" asp-for="Supplier.SupplierId" />
+	<div class="form-group">
+		<label asp-for="Supplier.Name"></label>
+		<input asp-for="Supplier.Name" class="form-control" />
+		<span asp-validation-for="Supplier.Name" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Supplier.City"></label>
+		<input asp-for="Supplier.City" class="form-control" />
+		<span asp-validation-for="Supplier.City" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a asp-page="/Suppliers/Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+<partial name="_ValidationScriptsPartial" />

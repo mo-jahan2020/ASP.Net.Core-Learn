@@ -1,0 +1,71 @@
+@* ----------------------------------------------------------------------------
+   صفحه حذف محصول (Delete.cshtml)
+   ----------------------------------------------------------------------------
+   قبل از حذف، تأیید کاربر گرفته می‌شود.
+   ---------------------------------------------------------------------------- *@
+
+@page "{id:long}"
+@model SportsStore.Pages.Products.DeleteModel
+@{
+    ViewData["Title"] = "حذف محصول";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-danger shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">تأیید حذف محصول</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Product != null)
+                {
+                    <div class="alert alert-warning">
+                        <strong>هشدار!</strong> آیا از حذف این محصول مطمئن هستید؟
+                        این عملیات قابل بازگشت نیست.
+                    </div>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 30%;">شناسه:</th>
+                            <td>@Model.Product.ProductID</td>
+                        </tr>
+                        <tr>
+                            <th>نام:</th>
+                            <td>@Model.Product.Name</td>
+                        </tr>
+                        <tr>
+                            <th>دسته‌بندی:</th>
+                            <td>@Model.Product.Category</td>
+                        </tr>
+                        <tr>
+                            <th>قیمت:</th>
+                            <td>@Model.Product.Price.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <th>توضیحات:</th>
+                            <td>@Model.Product.Description</td>
+                        </tr>
+                    </table>
+
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Product.ProductID" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                بله، حذف کن
+                            </button>
+                            <a asp-page="Details" asp-route-id="@Model.Product.ProductID"
+                               class="btn btn-info text-white">جزئیات</a>
+                            <a asp-page="Index" class="btn btn-secondary">انصراف</a>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-warning">محصول یافت نشد.</div>
+                    <a asp-page="Index" class="btn btn-secondary">بازگشت</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

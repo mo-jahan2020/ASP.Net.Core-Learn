@@ -1,0 +1,152 @@
+@* ----------------------------------------------------------------------------
+   صفحه Index محصولات (Pages/Products/Index.cshtml)
+   ----------------------------------------------------------------------------
+   این صفحه لیست محصولات را به صورت Grid (کارت‌های Bootstrap) نمایش می‌دهد
+   و دارای Pagination (صفحه‌بندی) است.
+   - کاربر می‌تواند دسته‌بندی را فیلتر کند
+   - هر کارت محصول دارای دکمه‌های جزئیات، ویرایش، حذف و افزودن به سبد است
+   - اگر محصول تصویر داشته باشد، نمایش داده می‌شود؛ در غیر این صورت Placeholder
+   - این صفحه نیاز به ورود دارد ([Authorize])
+
+   نکته فنی: دکمه "افزودن به سبد" از لینک GET استفاده می‌کند، نه فرم POST.
+   دلیل: Cross-page POST در Razor Pages به دلیل Antiforgery Token پیچیده است.
+   GET ساده‌تر است و برای افزودن به سبد کاملاً امن است (تغییر در Session، نه در DB).
+   ---------------------------------------------------------------------------- *@
+
+@page
+@model SportsStore.Pages.Products.IndexModel
+@{
+    ViewData["Title"] = "محصولات";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h1 class="mb-0">محصولات</h1>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        @* فقط کاربران با نقش Admin می‌توانند محصول جدید بسازند *@
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-page="Create" class="btn btn-success">
+                + افزودن محصول جدید
+            </a>
+        }
+    </div>
+</div>
+
+@* --- فیلتر دسته‌بندی --- *@
+<div class="mb-4">
+    <div class="btn-group flex-wrap" role="group">
+        <a asp-page="Index" class="btn btn-outline-primary
+           @(Model.CurrentCategory == null ? "active" : "")">
+            همه دسته‌ها
+        </a>
+        @foreach (var cat in Model.Categories)
+        {
+            <a asp-page="Index" asp-route-category="@cat"
+               asp-route-productPage="1"
+               class="btn btn-outline-primary
+               @(Model.CurrentCategory == cat ? "active" : "")">
+                @cat
+            </a>
+        }
+    </div>
+</div>
+
+@* --- نمایش محصولات به صورت Grid (کارت‌ها) --- *@
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @foreach (var p in Model.Products)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm product-card">
+                @* --- تصویر محصول (یا Placeholder اگر تصویر وجود ندارد) --- *@
+                @if (!string.IsNullOrEmpty(p.ImageUrl))
+                {
+                    <img src="@p.ImageUrl" class="product-image"
+                         alt="@p.Name"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                    <div class="product-image-placeholder" style="display:none;">
+                        <span>📦</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="product-image-placeholder">
+                        <span>📦</span>
+                    </div>
+                }
+
+                @* --- بدنه کارت: اطلاعات محصول --- *@
+                <div class="card-body">
+                    <h5 class="card-title">@p.Name</h5>
+                    <p class="card-text text-muted small mb-1">
+                        <span class="badge bg-secondary">@p.Category</span>
+                    </p>
+                    <p class="card-text small">@p.Description</p>
+                </div>
+
+                @* --- فوتر کارت: قیمت و دکمه‌ها --- *@
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="h5 mb-0 price">
+                            @p.Price.ToString("C")
+                        </span>
+                    </div>
+                    <div class="btn-group w-100" role="group">
+                        @* ----------------------------------------------------------------------------
+                           دکمه "افزودن به سبد" - از لینک GET استفاده می‌کند
+                           asp-page="/Cart": صفحه مقصد
+                           asp-page-handler="Add": نام Handler در PageModel
+                           asp-route-id: شناسه محصول
+                           asp-route-returnUrl: آدرس بازگشت (صفحه فعلی + Query string)
+                           ---------------------------------------------------------------------------- *@
+                        <a asp-page="/Cart"
+                           asp-page-handler="Add"
+                           asp-route-id="@p.ProductID"
+                           asp-route-returnUrl="@ViewContext.HttpContext.Request.Path@ViewContext.HttpContext.Request.QueryString"
+                           class="btn btn-success btn-sm">
+                            افزودن به سبد
+                        </a>
+                        <a asp-page="Details" asp-route-id="@p.ProductID"
+                           class="btn btn-info btn-sm text-white">
+                            جزئیات
+                        </a>
+                        @* دکمه‌های ویرایش/حذف فقط برای Admin *@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-page="Edit" asp-route-id="@p.ProductID"
+                               class="btn btn-warning btn-sm">
+                                ویرایش
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@p.ProductID"
+                               class="btn btn-danger btn-sm">
+                                حذف
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@* --- اگر محصولی وجود نداشت --- *@
+@if (!Model.Products.Any())
+{
+    <div class="alert alert-info text-center py-5">
+        <h4>هیچ محصولی یافت نشد</h4>
+        <p class="mb-0">در حال حاضر محصولی برای نمایش وجود ندارد.</p>
+    </div>
+}
+
+@* --- صفحه‌بندی (Pagination) --- *@
+@if (Model.PagingInfo.TotalPages > 1)
+{
+    <div class="mt-5">
+        @* استفاده از Extension Method برای ساخت لینک‌های صفحه‌بندی *@
+        @Html.PageLinks(
+                   Model.PagingInfo,
+                   page => Url.Page("Index",
+                       new { productPage = page, category = Model.CurrentCategory }))
+    </div>
+}

@@ -1,0 +1,27 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/Shared/_ValidationScriptsPartial.cshtml
+   هدف: بارگذاری کتابخانه‌های اعتبارسنجی سمت کلاینت (مرورگر)
+
+   📌 این فایل فقط در صفحاتی که فرم دارند استفاده می‌شود (Create، Edit)
+      از طریق @section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
+   📌 ترتیب بارگذاری مهم است:
+      ۱. jQuery (کتابخانه پایه)
+      ۲. jQuery Validate (افزونه اعتبارسنجی)
+      ۳. jQuery Validate Unobtrusive (پل بین Data Annotations و jQuery)
+
+   📌 Unobtrusive Validation چیست؟
+      ASP.NET Core ویژگی‌های HTML5 مثل data-val-required را
+      روی فیلدهای فرم می‌گذارد. jQuery Validate Unobtrusive
+      این ویژگی‌ها را می‌خواند و اعتبارسنجی را فعال می‌کند.
+      نتیجه: کاربر قبل از ارسال فرم، خطاها را می‌بیند.
+   ════════════════════════════════════════════════════════════════ *@
+
+@* ۱. jQuery — کتابخانه پایه JavaScript *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+@* ۲. jQuery Validate — افزونه اعتبارسنجی فرم *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+@* ۳. jQuery Validate Unobtrusive — پل بین ASP.NET Core و jQuery Validate *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,17 @@
+@* ----------------------------------------------------------------------------
+   View خطا (Views/Shared/Error.cshtml)
+   ---------------------------------------------------------------------------- *@
+
+@{
+    ViewData["Title"] = "خطا";
+}
+
+<h1 class="text-danger">خطا.</h1>
+<h2 class="text-danger">هنگام پردازش درخواست شما خطایی رخ داد.</h2>
+
+@if (ViewData["RequestId"] != null)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@ViewData["RequestId"]</code>
+    </p>
+}

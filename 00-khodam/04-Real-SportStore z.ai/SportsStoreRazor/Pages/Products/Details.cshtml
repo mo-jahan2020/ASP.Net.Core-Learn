@@ -1,0 +1,102 @@
+@* ----------------------------------------------------------------------------
+   صفحه جزئیات محصول (Details.cshtml)
+   ----------------------------------------------------------------------------
+   نمایش اطلاعات کامل یک محصول (شامل تصویر در صورت وجود)
+
+   نکته فنی: دکمه "افزودن به سبد" از لینک GET استفاده می‌کند (نه فرم POST)
+   تا از مشکل Antiforgery Token در Cross-page POST جلوگیری شود.
+   ---------------------------------------------------------------------------- *@
+
+@page "{id:long}"
+@model SportsStore.Pages.Products.DetailsModel
+@{
+    ViewData["Title"] = "جزئیات محصول";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">جزئیات محصول</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Product != null)
+                {
+                    <div class="row">
+                        @* --- ستون تصویر محصول --- *@
+                        <div class="col-md-4 mb-3">
+                            @if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
+                            {
+                                <img src="@Model.Product.ImageUrl"
+                                     class="img-fluid rounded shadow-sm"
+                                     alt="@Model.Product.Name"
+                                     onerror="this.style.display='none';document.getElementById('placeholder-@Model.Product.ProductID').style.display='flex';" />
+                                <div id="placeholder-@Model.Product.ProductID"
+                                     class="product-image-placeholder rounded"
+                                     style="display:none;">
+                                    <span>📦</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="product-image-placeholder rounded">
+                                    <span>📦</span>
+                                </div>
+                            }
+                        </div>
+
+                        @* --- ستون اطلاعات محصول --- *@
+                        <div class="col-md-8">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th style="width: 30%;">شناسه:</th>
+                                    <td>@Model.Product.ProductID</td>
+                                </tr>
+                                <tr>
+                                    <th>نام:</th>
+                                    <td><h5 class="mb-0">@Model.Product.Name</h5></td>
+                                </tr>
+                                <tr>
+                                    <th>دسته‌بندی:</th>
+                                    <td><span class="badge bg-secondary">@Model.Product.Category</span></td>
+                                </tr>
+                                <tr>
+                                    <th>قیمت:</th>
+                                    <td class="price h5">@Model.Product.Price.ToString("C")</td>
+                                </tr>
+                                <tr>
+                                    <th>توضیحات:</th>
+                                    <td>@Model.Product.Description</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4 flex-wrap">
+                        @* دکمه افزودن به سبد (لینک GET) *@
+                        <a asp-page="/Cart"
+                           asp-page-handler="Add"
+                           asp-route-id="@Model.Product.ProductID"
+                           asp-route-returnUrl="@ViewContext.HttpContext.Request.Path@ViewContext.HttpContext.Request.QueryString"
+                           class="btn btn-success">
+                            افزودن به سبد
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-page="Edit" asp-route-id="@Model.Product.ProductID"
+                               class="btn btn-warning">ویرایش</a>
+                            <a asp-page="Delete" asp-route-id="@Model.Product.ProductID"
+                               class="btn btn-danger">حذف</a>
+                        }
+                        <a asp-page="Index" class="btn btn-secondary">بازگشت</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">محصول یافت نشد.</div>
+                    <a asp-page="Index" class="btn btn-secondary">بازگشت</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

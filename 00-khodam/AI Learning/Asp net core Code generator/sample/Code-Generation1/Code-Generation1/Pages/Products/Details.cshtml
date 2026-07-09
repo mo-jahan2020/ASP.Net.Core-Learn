@@ -1,0 +1,30 @@
+@page "/Products/Details"
+@model Code_Generation1.Pages.Products.DetailsModel
+
+n@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+	<h4>Product</h4>
+	<hr />
+	<dl class="row">
+		<dt class = "col-sm-2">Name</dt>
+		<dd class = "col-sm-10">@Model.Product.Name</dd>
+		<dt class = "col-sm-2">Description</dt>
+		<dd class = "col-sm-10">@Model.Product.Description</dd>
+		<dt class = "col-sm-2">Price</dt>
+		<dd class = "col-sm-10">@Model.Product.Price</dd>
+		<dt class = "col-sm-2">Category</dt>
+		<dd class = "col-sm-10">@Model.Product.Category?.Name</dd>
+		<dt class = "col-sm-2">Supplier</dt>
+		<dd class = "col-sm-10">@Model.Product.Supplier?.Name</dd>
+	</dl>
+</div>
+
+<p>
+	<a asp-page="/Products/Edit" asp-route-id="@Model.Product.ProductID">Edit</a> |
+	<a asp-page="/Products/Index">Back to List</a>
+</p>

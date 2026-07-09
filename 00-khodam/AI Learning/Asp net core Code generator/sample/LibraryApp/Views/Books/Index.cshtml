@@ -1,0 +1,79 @@
+@* ============================================================ *@
+@* صفحه لیست کتاب‌ها - نمایش به‌صورت Grid (کارت) + Pagination    *@
+@* ============================================================ *@
+@model X.PagedList.IPagedList<LibraryApp.Models.Book>
+@{
+    ViewData["Title"] = "لیست کتاب‌ها";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-collection"></i> کتاب‌ها</h2>
+    <a class="btn btn-success" asp-action="Create">
+        <i class="bi bi-plus-circle"></i> ثبت کتاب جدید
+    </a>
+</div>
+
+<!-- فرم جستجو -->
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-10">
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control"
+               placeholder="جستجو بر اساس عنوان یا نویسنده..." />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-outline-primary w-100"><i class="bi bi-search"></i> جستجو</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">هیچ کتابی یافت نشد.</div>
+}
+else
+{
+    <!-- Grid کارتی - واکنش‌گرا (Responsive) -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var book in Model)
+        {
+            <div class="col">
+                <div class="card card-book h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">@book.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-person"></i> @book.Author
+                        </h6>
+                        @if (book.PublishYear.HasValue)
+                        {
+                            <p class="mb-1"><small>سال انتشار: @book.PublishYear</small></p>
+                        }
+                        @if (!string.IsNullOrEmpty(book.ISBN))
+                        {
+                            <p class="mb-1"><small>ISBN: @book.ISBN</small></p>
+                        }
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between">
+                        <!-- دکمه‌های عملیات: جزئیات / ویرایش / حذف -->
+                        <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@book.Id">
+                            <i class="bi bi-eye"></i> جزئیات
+                        </a>
+                        <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@book.Id">
+                            <i class="bi bi-pencil"></i> ویرایش
+                        </a>
+                        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@book.Id">
+                            <i class="bi bi-trash"></i> حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- نوار صفحه‌بندی -->
+    <div class="mt-4">
+        @Html.PagedListPager(Model,
+            page => Url.Action("Index", new { page, search = ViewBag.Search }))
+    </div>
+
+    <p class="text-center text-muted">
+        صفحه @Model.PageNumber از @Model.PageCount | مجموع: @Model.TotalItemCount کتاب
+    </p>
+}

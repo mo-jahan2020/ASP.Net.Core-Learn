@@ -1,0 +1,116 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/User/Edit.cshtml
+   هدف: فرم ویرایش اطلاعات کاربر موجود
+
+   📌 تفاوت Create و Edit:
+      - Edit فرم را با داده‌های فعلی کاربر پر می‌کند
+      - فیلد hidden برای Id داریم (برای ارسال Id به Controller)
+      - Action متفاوت است: asp-action="Edit"
+
+   📌 Hidden Field چیست؟
+      <input type="hidden"> یک فیلد نامرئی است که کاربر آن را
+      نمی‌بیند ولی مقدارش با فرم ارسال می‌شود.
+      برای Id استفاده می‌شود چون Id نباید توسط کاربر تغییر کند.
+   ════════════════════════════════════════════════════════════════ *@
+
+@model RazorSample.Models.UserInputModel
+
+@{
+    ViewData["Title"] = "ویرایش کاربر";
+}
+
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-pencil-square me-2 text-warning"></i>ویرایش کاربر</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/User">لیست کاربران</a></li>
+                @* نام کاربر را در Breadcrumb نشان می‌دهیم — از Model می‌خوانیم *@
+                <li class="breadcrumb-item active">ویرایش: @Model.Name @Model.Family</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="card form-card">
+    <div class="card-header-custom">
+        <i class="bi bi-person-gear"></i>
+        <span>ویرایش اطلاعات کاربر</span>
+        @* نمایش Id کاربر در بج — ms-auto آن را به انتهای ردیف می‌برد *@
+        <span class="badge bg-warning-subtle text-warning rounded-pill ms-auto">شناسه: @Model.Id</span>
+    </div>
+    <div class="card-body p-4">
+
+        @* asp-action="Edit" → فرم را به Action Edit در UserController ارسال می‌کند *@
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            @* ── فیلد Hidden برای Id ── *@
+            @* این فیلد Id را با فرم ارسال می‌کند تا Controller بداند کدام رکورد را ویرایش کند *@
+            @* asp-for="Id" → مقدار Model.Id را در value قرار می‌دهد *@
+            <input asp-for="Id" type="hidden" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label"></label>
+                    @* asp-for به طور خودکار مقدار فعلی را در value قرار می‌دهد *@
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Family" class="form-label"></label>
+                    <input asp-for="Family" class="form-control" />
+                    <span asp-validation-for="Family" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BirthDate" class="form-label"></label>
+                    <input asp-for="BirthDate" class="form-control" type="date" />
+                    <span asp-validation-for="BirthDate" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" dir="ltr" />
+                    <span asp-validation-for="Email" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Tel" class="form-label"></label>
+                    <input asp-for="Tel" class="form-control" dir="ltr" maxlength="11" />
+                    <span asp-validation-for="Tel" class="invalid-feedback d-block text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Address" class="form-label"></label>
+                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="invalid-feedback d-block text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4 pt-3 border-top">
+                <button type="submit" class="btn btn-warning text-white fw-semibold px-4">
+                    <i class="bi bi-save me-1"></i>ذخیره تغییرات
+                </button>
+                @* لینک به صفحه جزئیات همین کاربر *@
+                <a href="/User/Details/@Model.Id" class="btn btn-outline-secondary-custom">
+                    <i class="bi bi-eye me-1"></i>مشاهده جزئیات
+                </a>
+                <a href="/User" class="btn btn-outline-secondary-custom">
+                    <i class="bi bi-arrow-right me-1"></i>بازگشت
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

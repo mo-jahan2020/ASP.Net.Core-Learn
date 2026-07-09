@@ -1,0 +1,14 @@
+﻿@page
+@model CounterModel
+@{
+    ViewData["Title"] = "Counter";
+}
+
+<h1>Counter</h1>
+
+<p>مقدار: <strong>@Model.Count</strong></p>
+
+<form method="post">
+    <input type="hidden" asp-for="Count" />
+    <button type="submit" class="btn btn-primary">ADD</button>
+</form>

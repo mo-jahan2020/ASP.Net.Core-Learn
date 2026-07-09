@@ -1,0 +1,24 @@
+@page "/Suppliers/Create"
+@model Code_Generation1.Pages.Suppliers.CreateModel
+@{
+	ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<form method="post">
+	<div class="form-group">
+		<label asp-for="Supplier.Name"></label>
+		<input asp-for="Supplier.Name" class="form-control" />
+		<span asp-validation-for="Supplier.Name" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Supplier.City"></label>
+		<input asp-for="Supplier.City" class="form-control" />
+		<span asp-validation-for="Supplier.City" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-page="/Suppliers/Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+<partial name="_ValidationScriptsPartial" />

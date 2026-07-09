@@ -1,0 +1,183 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/User/Index.cshtml
+   هدف: نمایش لیست کاربران در یک Grid با قابلیت Pagination
+
+   📌 Razor Syntax چیست؟
+      Razor یک موتور Template است که HTML و C# را ترکیب می‌کند.
+      هر چیزی که با @ شروع شود یعنی کد C# است.
+      مثال: @Model.Name → مقدار Property "Name" از Model را نمایش بده
+
+   📌 Model این View چیست؟
+      IEnumerable<UserInputModel> یعنی یک لیست از کاربران
+      این لیست از Controller توسط return View(users) فرستاده شده
+   ════════════════════════════════════════════════════════════════ *@
+
+@* تعریف نوع Model — به View می‌گوید چه نوع داده‌ای دریافت می‌کند *@
+@model IEnumerable<RazorSample.Models.UserInputModel>
+
+@* بلوک کد Razor — برای تنظیمات اولیه View *@
+@{
+    // عنوان صفحه — در _Layout.cshtml با @ViewData["Title"] نمایش داده می‌شود
+    ViewData["Title"] = "لیست کاربران";
+
+    // خواندن مقادیر Pagination از ViewBag که Controller تنظیم کرده
+    // ViewBag یک شیء پویا است — می‌توان هر Property دلخواهی به آن اضافه کرد
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+    int totalCount = ViewBag.TotalCount;
+}
+
+@* ── هدر صفحه ── *@
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-people me-2 text-primary"></i>لیست کاربران</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                @* @ قبل از totalCount یعنی مقدار C# را اینجا نمایش بده *@
+                <li class="breadcrumb-item active">@totalCount کاربر ثبت‌شده</li>
+            </ol>
+        </nav>
+    </div>
+    <a href="/User/Create" class="btn btn-primary-custom">
+        <i class="bi bi-person-plus me-1"></i>افزودن کاربر جدید
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header-custom">
+        <i class="bi bi-table"></i>
+        <span>جدول کاربران</span>
+        <span class="badge bg-primary-subtle text-primary rounded-pill ms-auto">صفحه @currentPage از @totalPages</span>
+    </div>
+
+    @* ── بررسی خالی بودن لیست ── *@
+    @* Model.Any() → آیا حداقل یک آیتم در لیست وجود دارد؟ *@
+    @if (!Model.Any())
+    {
+        @* نمایش پیام خالی بودن — Empty State *@
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-inbox display-4 d-block mb-3"></i>
+            <p>هیچ کاربری ثبت نشده است.</p>
+            <a href="/User/Create" class="btn btn-primary-custom">اولین کاربر را اضافه کنید</a>
+        </div>
+    }
+    else
+    {
+        @* ── جدول کاربران ── *@
+        @* table-responsive → جدول در موبایل قابل اسکرول افقی می‌شود *@
+        <div class="table-responsive">
+            <table class="table table-hover table-custom">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>نام و نام خانوادگی</th>
+                        <th>ایمیل</th>
+                        <th>تلفن</th>
+                        <th>شهر</th>
+                        <th>تاریخ تولد</th>
+                        <th class="text-center">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* ── حلقه روی لیست کاربران ── *@
+                    @* foreach در Razor دقیقاً مثل C# است *@
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="text-muted fw-semibold">@user.Id</td>
+
+                            @* ── ستون نام با آواتار ── *@
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    @* آواتار: اولین حرف نام کاربر *@
+                                    @* user.Name[0] → اولین کاراکتر رشته نام *@
+                                    <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold"
+                                         style="width:36px;height:36px;font-size:.85rem;flex-shrink:0">
+                                        @user.Name[0]
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@user.Name @user.Family</div>
+                                        @* نمایش بخشی از آدرس — Substring برش رشته *@
+                                        @* Math.Min برای جلوگیری از خطا اگر آدرس کمتر از ۳۰ کاراکتر داشت *@
+                                        <div class="text-muted" style="font-size:.75rem">
+                                            @user.Address.Substring(0, Math.Min(30, user.Address.Length))@(user.Address.Length > 30 ? "..." : "")
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td><a href="mailto:@user.Email" class="text-decoration-none">@user.Email</a></td>
+
+                            @* dir="ltr" برای نمایش صحیح اعداد — اعداد چپ به راست هستند *@
+                            <td dir="ltr" class="text-start">@user.Tel</td>
+
+                            @* Badge برای شهر — نمایش زیباتر *@
+                            <td><span class="badge bg-secondary-subtle text-secondary badge-row">@user.City</span></td>
+
+                            @* بررسی Nullable برای تاریخ — اگر null بود خط تیره نشان بده *@
+                            @* ? قبل از . یعنی: اگر BirthDate null بود Crash نکن *@
+                            <td>@(user.BirthDate.HasValue ? user.BirthDate.Value.ToString("yyyy/MM/dd") : "-")</td>
+
+                            @* ── دکمه‌های عملیات ── *@
+                            <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                    @* دکمه جزئیات *@
+                                    <a href="/User/Details/@user.Id" class="btn btn-info btn-action text-white" title="جزئیات">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @* دکمه ویرایش *@
+                                    <a href="/User/Edit/@user.Id" class="btn btn-warning btn-action text-white" title="ویرایش">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    @* دکمه حذف *@
+                                    <a href="/User/Delete/@user.Id" class="btn btn-danger btn-action" title="حذف">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @* ── Pagination (صفحه‌بندی) ── *@
+        @* فقط اگر بیش از یک صفحه داریم نمایش بده *@
+        @if (totalPages > 1)
+        {
+            <div class="d-flex justify-content-between align-items-center px-3 py-3 border-top">
+                <small class="text-muted">
+                    نمایش صفحه @currentPage از @totalPages (مجموع @totalCount رکورد)
+                </small>
+
+                @* کامپوننت Pagination از Bootstrap *@
+                <ul class="pagination pagination-custom mb-0">
+
+                    @* دکمه «قبلی» — اگر صفحه اول هستیم، غیرفعال (disabled) می‌شود *@
+                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" href="?page=@(currentPage - 1)">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                    @* حلقه برای نمایش شماره صفحات *@
+                    @for (int p = 1; p <= totalPages; p++)
+                    {
+                        @* صفحه فعلی با کلاس "active" مشخص می‌شود (رنگ آبی) *@
+                        <li class="page-item @(p == currentPage ? "active" : "")">
+                            @* ?page=@p → پارامتر Query String برای شماره صفحه *@
+                            <a class="page-link" href="?page=@p">@p</a>
+                        </li>
+                    }
+
+                    @* دکمه «بعدی» — اگر آخرین صفحه هستیم، غیرفعال می‌شود *@
+                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                        <a class="page-link" href="?page=@(currentPage + 1)">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+    }
+</div>

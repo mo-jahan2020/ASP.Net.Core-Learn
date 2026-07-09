@@ -1,0 +1,62 @@
+@* ----------------------------------------------------------------------------
+   View ورود به سیستم (Views/Account/Login.cshtml)
+   ----------------------------------------------------------------------------
+   در MVC، View با @model به ViewModel متصل می‌شود.
+   فرم با asp-controller و asp-action به اکشن مربوطه متصل می‌شود.
+   ---------------------------------------------------------------------------- *@
+
+@model LoginModel
+@{
+    ViewData["Title"] = "ورود به سیستم";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-center">
+                <h4 class="mb-0">ورود به فروشگاه</h4>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">نام کاربری</label>
+                        <input asp-for="Name" class="form-control"
+                               placeholder="نام کاربری خود را وارد کنید" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">رمز عبور</label>
+                        <input asp-for="Password" type="password" class="form-control"
+                               placeholder="رمز عبور خود را وارد کنید" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">ورود</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <small>
+                            حساب کاربری ندارید؟
+                            <a asp-controller="Account" asp-action="Register">ثبت‌نام کنید</a>
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted text-center small">
+                <strong>کاربر پیش‌فرض Admin:</strong> Admin / <strong>رمز:</strong> Secret123$
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

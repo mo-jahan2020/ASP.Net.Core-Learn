@@ -1,0 +1,12 @@
+@* این صفحه در زمان بروز خطاهای عمومی برنامه نمایش داده می‌شود. *@
+@{
+    ViewData["Title"] = "خطا";
+}
+
+<div class="card shadow-sm">
+    <div class="card-body text-center py-5">
+        <h1 class="h3 text-danger mb-3">خطایی رخ داده است</h1>
+        <p class="text-muted mb-4">لطفاً دوباره تلاش کن یا تنظیمات پروژه و اتصال بانک اطلاعاتی را بررسی کن.</p>
+        <a asp-controller="Users" asp-action="Index" class="btn btn-primary">بازگشت به لیست کاربران</a>
+    </div>
+</div>

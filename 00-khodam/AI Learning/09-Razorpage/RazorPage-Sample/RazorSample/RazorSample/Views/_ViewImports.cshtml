@@ -1,0 +1,22 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/_ViewImports.cshtml
+   هدف: تعریف using ها و Tag Helper هایی که در همه View ها مشترک هستند
+
+   📌 بدون این فایل، باید در هر View این موارد را تکرار کنیم.
+      این فایل یک بار خوانده می‌شود و روی همه View ها اعمال می‌شود.
+
+   📌 Tag Helpers چیست؟
+      ویژگی‌هایی مثل asp-for، asp-action، asp-validation-for
+      که HTML Helper هستند و توسط ASP.NET Core پردازش می‌شوند.
+      addTagHelper * یعنی همه Tag Helper های موجود را فعال کن.
+   ════════════════════════════════════════════════════════════════ *@
+
+@* وارد کردن Namespace اصلی پروژه — برای دسترسی به کلاس‌ها بدون نوشتن Namespace کامل *@
+@using RazorSample
+
+@* وارد کردن Namespace مدل‌ها — برای استفاده از UserInputModel در View ها *@
+@using RazorSample.Models
+
+@* فعال کردن Tag Helpers از اسمبلی ASP.NET Core MVC *@
+@* * یعنی همه Tag Helper ها — asp-for، asp-action، asp-route و... *@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -1,0 +1,79 @@
+@model UserCreateViewModel
+
+@* این View فرم ثبت کاربر جدید را نمایش می‌دهد.
+   در این نسخه از UserCreateViewModel استفاده شده تا View مستقیماً به Entity دیتابیس وابسته نباشد. *@
+
+@{
+    ViewData["Title"] = "ایجاد کاربر جدید";
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">ایجاد کاربر جدید</h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">بازگشت</a>
+        </div>
+
+        @* فرم به اکشن Create در کنترلر ارسال می‌شود. *@
+        <form asp-action="Create" method="post" novalidate>
+            @* خطاهای کلی مدل در این بخش نمایش داده می‌شوند. *@
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                @* هر input با asp-for به یک Property از مدل متصل می‌شود. *@
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Family" class="form-label"></label>
+                    <input asp-for="Family" class="form-control" />
+                    <span asp-validation-for="Family" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="BirthDate" class="form-label"></label>
+                    <input asp-for="BirthDate" class="form-control" type="date" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Address" class="form-label"></label>
+                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Tel" class="form-label"></label>
+                    <input asp-for="Tel" class="form-control" />
+                    <span asp-validation-for="Tel" class="text-danger"></span>
+                </div>
+            </div>
+
+            @* دکمه ثبت و انصراف *@
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-success">ثبت کاربر</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* اسکریپت‌های اعتبارسنجی سمت مرورگر *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

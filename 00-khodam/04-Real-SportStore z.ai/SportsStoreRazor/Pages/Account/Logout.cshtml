@@ -1,0 +1,30 @@
+@* ----------------------------------------------------------------------------
+   صفحه خروج از سیستم (Logout.cshtml)
+   ----------------------------------------------------------------------------
+   این صفحه کاربر را از سیستم خارج می‌کند و به صفحه اصلی هدایت می‌کند.
+   توجه: خروج فقط با متد POST انجام می‌شود (برای امنیت).
+   ---------------------------------------------------------------------------- *@
+
+@page
+@model SportsStore.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "خروج";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">خروج از حساب کاربری</h4>
+            </div>
+            <div class="card-body text-center">
+                <p>در حال خروج از سیستم...</p>
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">تأیید خروج</button>
+                    <a asp-page="/Products/Index" class="btn btn-secondary">انصراف</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

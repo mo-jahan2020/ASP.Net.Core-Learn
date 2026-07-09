@@ -1,0 +1,53 @@
+﻿@page
+@model Code_Generation1.Pages.Suppliers.UserFormModel
+@{
+}
+@{
+    ViewData["Title"] = "User Information Form";
+}
+
+<h2>User Information</h2>
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label>Name</label>
+                <input asp-for="UserInfo.Name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Family</label>
+                <input asp-for="UserInfo.Family" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Father</label>
+                <input asp-for="UserInfo.Father" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Sh-melli (National ID)</label>
+                <input asp-for="UserInfo.ShMelli" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label>City</label>
+                <input asp-for="UserInfo.City" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Address</label>
+                <textarea asp-for="UserInfo.Address" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <input asp-for="UserInfo.Email" class="form-control" type="email" />
+            </div>
+            <div class="mb-3">
+                <label>Tel</label>
+                <input asp-for="UserInfo.Tel" class="form-control" type="tel" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" asp-page-handler="Save" class="btn btn-primary">Save</button>
+    <button type="submit" asp-page-handler="Clear" class="btn btn-secondary">Clear</button>
+</form>

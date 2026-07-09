@@ -1,0 +1,160 @@
+@* ----------------------------------------------------------------------------
+   فایل _Layout.cshtml
+   ----------------------------------------------------------------------------
+   این فایل قالب اصلی (Layout) تمام صفحات برنامه است.
+   - از Bootstrap محلی (در wwwroot/lib/bootstrap) استفاده می‌شود - بدون CDN
+   - فونت Vazirmatn محلی بارگذاری می‌شود
+   - شامل Header، Body و Footer است
+   - نوار ناوبری (Navbar) شامل لینک‌های محصولات، سبد خرید، سفارشات، گزارش‌ها و ورود/خروج است
+   - RTL تنظیم شده چون فارسی هستیم
+   ---------------------------------------------------------------------------- *@
+
+@using Microsoft.AspNetCore.Identity
+@* تزریق SignInManager برای نمایش نام کاربر *@
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - فروشگاه ورزشی</title>
+
+    @* --- فایل‌های CSS محلی Bootstrap و فونت Vazirmatn (نه از CDN) --- *@
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @* --- نوار ناوبری بالا --- *@
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-page="/Products/Index">فروشگاه ورزشی</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Products/Index">محصولات</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Order/Index">سفارشات</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Cart">سبد خرید</a>
+                        </li>
+                        @* لینک گزارش‌ها فقط برای Admin *@
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Reports/Index">گزارش‌ها</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/DbStatus">وضعیت DB</a>
+                            </li>
+                        }
+                    </ul>
+
+                    @* --- بخش ورود/خروج کاربر --- *@
+                    <ul class="navbar-nav ms-auto">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#"
+                                   id="userDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    سلام، @User.Identity?.Name!
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="userDropdown">
+                                    <li>
+                                        <span class="dropdown-item-text small text-muted">
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <span class="badge bg-danger">مدیر</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info text-dark">کاربر</span>
+                                            }
+                                        </span>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/Order/Index">
+                                            سفارشات من
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form method="post" asp-page="/Account/Logout"
+                                              class="form-inline">
+                                            <button type="submit"
+                                                    class="dropdown-item text-danger">
+                                                خروج از سیستم
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Login">ورود</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Register">ثبت‌نام</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @* --- بخش اصلی محتوا --- *@
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            @* نمایش پیام‌های موفقیت/خطا *@
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @* --- محتوای صفحه (RenderBody) --- *@
+            @RenderBody()
+        </main>
+    </div>
+
+    @* --- فوتر --- *@
+    <footer class="border-top footer text-muted">
+        <div class="container text-center py-3">
+            &copy; @DateTime.Now.Year - فروشگاه ورزشی | پروژه آموزشی ASP.NET Core Razor Pages
+        </div>
+    </footer>
+
+    @* --- اسکریپت‌های محلی --- *@
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* --- Section برای اسکریپت‌های اختصاصی هر صفحه --- *@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

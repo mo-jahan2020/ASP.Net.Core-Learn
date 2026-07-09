@@ -1,0 +1,42 @@
+@model UserDeleteViewModel
+
+@* این View ابتدا اطلاعات کاربر را نشان می‌دهد و بعد از تأیید، فرم حذف ارسال می‌شود. *@
+
+@{
+    ViewData["Title"] = "حذف کاربر";
+}
+
+<div class="card shadow-sm border-danger">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 text-danger mb-0">حذف کاربر</h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">بازگشت</a>
+        </div>
+
+        <div class="alert alert-danger">
+            آیا از حذف این کاربر مطمئن هستی؟
+        </div>
+
+        @* اطلاعات کلیدی کاربر قبل از حذف نمایش داده می‌شود تا اشتباه حذف نشود. *@
+        <dl class="row details-list">
+            <dt class="col-sm-3">نام</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">نام خانوادگی</dt>
+            <dd class="col-sm-9">@Model.Family</dd>
+
+            <dt class="col-sm-3">ایمیل</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">شماره تلفن</dt>
+            <dd class="col-sm-9">@Model.Tel</dd>
+        </dl>
+
+        @* با ارسال این فرم، اکشن Delete از نوع POST اجرا می‌شود. *@
+        <form asp-action="Delete" method="post" class="mt-4 d-flex gap-2">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">حذف نهایی</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">انصراف</a>
+        </form>
+    </div>
+</div>

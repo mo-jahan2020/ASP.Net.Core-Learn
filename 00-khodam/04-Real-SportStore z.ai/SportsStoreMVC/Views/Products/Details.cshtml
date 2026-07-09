@@ -1,0 +1,82 @@
+@* ----------------------------------------------------------------------------
+   View جزئیات محصول (Views/Products/Details.cshtml)
+   ---------------------------------------------------------------------------- *@
+
+@model Product
+@{
+    ViewData["Title"] = "جزئیات محصول";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">جزئیات محصول</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl"
+                                 class="img-fluid rounded shadow-sm"
+                                 alt="@Model.Name"
+                                 onerror="this.style.display='none';document.getElementById('placeholder').style.display='flex';" />
+                            <div id="placeholder" class="product-image-placeholder rounded" style="display:none;">
+                                <span>📦</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="product-image-placeholder rounded">
+                                <span>📦</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-8">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%;">شناسه:</th>
+                                <td>@Model.ProductID</td>
+                            </tr>
+                            <tr>
+                                <th>نام:</th>
+                                <td><h5 class="mb-0">@Model.Name</h5></td>
+                            </tr>
+                            <tr>
+                                <th>دسته‌بندی:</th>
+                                <td><span class="badge bg-secondary">@Model.Category</span></td>
+                            </tr>
+                            <tr>
+                                <th>قیمت:</th>
+                                <td class="price h5">@Model.Price.ToString("C")</td>
+                            </tr>
+                            <tr>
+                                <th>توضیحات:</th>
+                                <td>@Model.Description</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 flex-wrap">
+                    <a asp-controller="Cart" asp-action="Add"
+                       asp-route-id="@Model.ProductID"
+                       asp-route-returnUrl="@ViewContext.HttpContext.Request.Path@ViewContext.HttpContext.Request.QueryString"
+                       class="btn btn-success">
+                        افزودن به سبد
+                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Products" asp-action="Edit"
+                           asp-route-id="@Model.ProductID" class="btn btn-warning">ویرایش</a>
+                        <a asp-controller="Products" asp-action="Delete"
+                           asp-route-id="@Model.ProductID" class="btn btn-danger">حذف</a>
+                    }
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">بازگشت</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

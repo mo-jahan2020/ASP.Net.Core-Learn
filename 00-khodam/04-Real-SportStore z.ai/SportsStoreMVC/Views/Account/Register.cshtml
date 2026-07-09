@@ -1,0 +1,70 @@
+@* ----------------------------------------------------------------------------
+   View ثبت‌نام کاربر جدید (Views/Account/Register.cshtml)
+   ---------------------------------------------------------------------------- *@
+
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "ثبت‌نام";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">ثبت‌نام در فروشگاه</h4>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label">نام کاربری</label>
+                        <input asp-for="UserName" class="form-control"
+                               placeholder="نام کاربری دلخواه" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">ایمیل</label>
+                        <input asp-for="Email" class="form-control"
+                               type="email" placeholder="example@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">رمز عبور</label>
+                        <input asp-for="Password" type="password" class="form-control"
+                               placeholder="حداقل ۸ کاراکتر شامل حرف بزرگ، کوچک، عدد و علامت" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <small class="form-text text-muted">
+                            رمز باید حداقل ۸ کاراکتر و شامل حرف بزرگ، حرف کوچک، عدد و یک کاراکتر ویژه باشد.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">تکرار رمز عبور</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <small>
+                            قبلاً ثبت‌نام کرده‌اید؟
+                            <a asp-controller="Account" asp-action="Login">ورود به سیستم</a>
+                        </small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

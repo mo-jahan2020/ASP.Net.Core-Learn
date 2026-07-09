@@ -1,0 +1,128 @@
+@* ----------------------------------------------------------------------------
+   View جزئیات سفارش (Views/Order/Details.cshtml)
+   ---------------------------------------------------------------------------- *@
+
+@model SportsStore.Models.Order
+@{
+    ViewData["Title"] = "جزئیات سفارش";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">جزئیات سفارش #@Model?.OrderID</h4>
+                <a asp-controller="Order" asp-action="Index" class="btn btn-light btn-sm">بازگشت</a>
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>اطلاعات گیرنده</h5>
+                            <table class="table table-sm table-borderless">
+                                <tr><th style="width:30%">نام:</th><td>@Model.Name</td></tr>
+                                <tr><th>آدرس:</th>
+                                    <td>
+                                        @Model.Line1<br />
+                                        @if (!string.IsNullOrEmpty(Model.Line2))
+                                        {
+                                            @Model.Line2<br />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.Line3))
+                                        {
+                                            @Model.Line3<br />
+                                        }
+                                        @Model.City، @Model.State<br />
+                                        @if (!string.IsNullOrEmpty(Model.Zip))
+                                        {
+                                            <text>کد پستی: @Model.Zip<br /></text>
+                                        }
+                                        @Model.Country
+                                    </td>
+                                </tr>
+                                <tr><th>بسته‌بندی هدیه:</th>
+                                    <td>
+                                        @if (Model.GiftWrap)
+                                        {
+                                            <span class="badge bg-success">بله</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">خیر</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr><th>وضعیت:</th>
+                                    <td>
+                                        @if (Model.Shipped)
+                                        {
+                                            <span class="badge bg-success">ارسال شده</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">در انتظار ارسال</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>اقلام سفارش</h5>
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>محصول</th>
+                                        <th class="text-center">قیمت</th>
+                                        <th class="text-center">تعداد</th>
+                                        <th class="text-center">جمع</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var line in Model.Lines)
+                                    {
+                                        <tr>
+                                            <td>@line.Product.Name</td>
+                                            <td class="text-center">@line.Product.Price.ToString("C")</td>
+                                            <td class="text-center">@line.Quantity</td>
+                                            <td class="text-center">
+                                                @((line.Product.Price * line.Quantity).ToString("C"))
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-active fw-bold">
+                                        <td colspan="3" class="text-end">مجموع کل:</td>
+                                        <td class="text-center text-success">
+                                            @(Model.Lines.Sum(l => l.Product.Price * l.Quantity).ToString("C"))
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Order" asp-action="Index" class="btn btn-secondary">بازگشت به لیست</a>
+                        @if (!Model.Shipped && User.IsInRole("Admin"))
+                        {
+                            <form asp-controller="Order" asp-action="DetailsMarkShipped"
+                                  asp-route-id="@Model.OrderID" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success">
+                                    علامت‌گذاری به عنوان ارسال شده
+                                </button>
+                            </form>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">سفارش یافت نشد.</div>
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-secondary">بازگشت</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

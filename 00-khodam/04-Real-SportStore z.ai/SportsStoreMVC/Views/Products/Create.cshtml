@@ -1,0 +1,111 @@
+@* ----------------------------------------------------------------------------
+   View ایجاد محصول جدید (Views/Products/Create.cshtml)
+   ----------------------------------------------------------------------------
+   فرم با asp-controller="Products" asp-action="Create" به اکشن POST متصل می‌شود.
+   ---------------------------------------------------------------------------- *@
+
+@model Product
+@{
+    ViewData["Title"] = "افزودن محصول جدید";
+    var categories = ViewBag.ExistingCategories as IEnumerable<string> ?? Enumerable.Empty<string>();
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">افزودن محصول جدید</h4>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Products" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">نام محصول</label>
+                        <input asp-for="Name" class="form-control" placeholder="مثلاً: Kayak" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">توضیحات</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"
+                                  placeholder="توضیحات محصول"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Price" class="form-label">قیمت (دلار)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="Price" class="form-control"
+                                       type="number" step="0.01" min="0.01" placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Category" class="form-label">دسته‌بندی</label>
+                            <input asp-for="Category" class="form-control"
+                                   placeholder="مثلاً: Watersports" list="categoriesList" />
+                            <datalist id="categoriesList">
+                                @foreach (var cat in categories)
+                                {
+                                    <option value="@cat"></option>
+                                }
+                            </datalist>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ImageUrl" class="form-label">آدرس تصویر محصول (اختیاری)</label>
+                        <input asp-for="ImageUrl" class="form-control"
+                               placeholder="https://example.com/image.jpg" />
+                        <small class="form-text text-muted">
+                            آدرس URL یک تصویر برای محصول. اگر خالی بگذارید، یک آیکون پیش‌فرض نمایش داده می‌شود.
+                        </small>
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3" id="imagePreviewContainer" style="display:none;">
+                        <label class="form-label">پیش‌نمایش تصویر:</label>
+                        <img id="imagePreview" src="" alt="پیش‌نمایش"
+                             class="img-thumbnail" style="max-height: 200px;" />
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-success">ذخیره محصول</button>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // نمایش پیش‌نمایش تصویر هنگام تایپ آدرس
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlInput = document.getElementById('ImageUrl');
+            var previewContainer = document.getElementById('imagePreviewContainer');
+            var previewImg = document.getElementById('imagePreview');
+
+            urlInput.addEventListener('input', function() {
+                if (this.value) {
+                    previewImg.src = this.value;
+                    previewContainer.style.display = 'block';
+                    previewImg.onerror = function() {
+                        previewContainer.style.display = 'none';
+                    };
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

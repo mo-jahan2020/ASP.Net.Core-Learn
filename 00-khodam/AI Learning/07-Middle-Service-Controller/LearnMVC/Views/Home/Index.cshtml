@@ -1,0 +1,89 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "آموزش DI و Middleware";
+}
+
+<link rel="stylesheet" href="~/css/StyleSheet.css"/>
+<!-- Middleware Card -->
+<div class="card middleware">
+    <h2>🚦 Middleware <span class="badge badge-red">درخواست از این عبور کرد</span></h2>
+
+    <div class="pipeline">
+        <div class="pipeline-step">🌐 Browser</div>
+        <div class="arrow">←</div>
+        <div class="pipeline-step active">📝 RequestLoggingMiddleware</div>
+        <div class="arrow">←</div>
+        <div class="pipeline-step">🎮 HomeController</div>
+    </div>
+
+    <div class="info-row">
+        <span>📍 مسیر درخواست:</span>
+        <strong>@Model.RequestPath</strong>
+    </div>
+    <div class="info-row">
+        <span>🕐 زمان دریافت:</span>
+        <strong>@Model.RequestTime.ToString("HH:mm:ss.fff")</strong>
+    </div>
+    <div class="info-row">
+        <span>💡 کار Middleware:</span>
+        <span>ثبت زمان، افزودن هدر X-Request-Logged، اندازه‌گیری مدت</span>
+    </div>
+
+    <p style="margin-top:1rem; font-size:0.85rem; color:#718096;">
+        ⬆️ برو به <strong>RequestLoggingMiddleware.cs</strong> و ببین قبل و بعد از Controller چه اتفاقی می‌افتد.
+        در Output پنجره‌ی Visual Studio لاگ‌ها را ببین!
+    </p>
+</div>
+
+<!-- DI Card -->
+<div class="card di">
+    <h2>💉 Dependency Injection <span class="badge badge-blue">Scoped Lifetime</span></h2>
+
+    <div class="info-row">
+        <span>Interface:</span>
+        <code>IGreetingService</code>
+    </div>
+    <div class="info-row">
+        <span>پیاده‌سازی:</span>
+        <code>GreetingService</code>
+    </div>
+    <div class="info-row">
+        <span>Lifetime:</span>
+        <strong>Scoped = یک نمونه به ازای هر Request</strong>
+    </div>
+
+    <p style="margin-top:1rem; font-size:0.85rem; color:#718096;">
+        💡 HomeController از <strong>IGreetingService</strong> استفاده می‌کند، نه مستقیم از <strong>GreetingService</strong>.
+        به همین دلیل می‌توانی فردا پیاده‌سازی را عوض کنی بدون اینکه Controller تغییر کند!
+    </p>
+</div>
+
+<!-- Service Card -->
+<div class="card service">
+    <h2>⚙️ Service در عمل <span class="badge badge-green">نتیجه اجرا</span></h2>
+
+    <div class="greeting-box">@Model.TimeGreeting</div>
+    <div class="greeting-box">@Model.PersonalGreeting</div>
+
+    <h3 style="margin-top:1rem; margin-bottom:0.5rem; font-size:0.95rem; color:#718096;">
+        📋 تاریخچه صداهای سرویس در این Request:
+    </h3>
+    @foreach (var item in Model.GreetingHistory)
+    {
+        <div class="history-item">✓ @item</div>
+    }
+
+    <p style="margin-top:1rem; font-size:0.85rem; color:#718096;">
+        چون Lifetime روی <strong>Scoped</strong> است، تاریخچه بین Action‌های مختلف در <em>یک Request</em> مشترک است.
+        اگر <strong>Transient</strong> بود، هر بار خالی می‌شد!
+    </p>
+</div>
+
+<!-- Quick Test -->
+<div class="card" style="background:#fffbeb; border: 1px solid #f6e05e;">
+    <h2 style="border-color:#d69e2e; color:#d69e2e;">🧪 تست سریع</h2>
+    <p style="margin-bottom:1rem;">روی لینک‌های زیر کلیک کن و تفاوت را ببین:</p>
+    <a href="/Home/Greet?name=علی" style="display:inline-block; padding:0.5rem 1.2rem; background:#3182ce; color:white; border-radius:8px; text-decoration:none; margin: 0.3rem;">سلام به علی</a>
+    <a href="/Home/Greet?name=سارا" style="display:inline-block; padding:0.5rem 1.2rem; background:#38a169; color:white; border-radius:8px; text-decoration:none; margin: 0.3rem;">سلام به سارا</a>
+    <a href="/" style="display:inline-block; padding:0.5rem 1.2rem; background:#718096; color:white; border-radius:8px; text-decoration:none; margin: 0.3rem;">برگشت به خانه</a>
+</div>

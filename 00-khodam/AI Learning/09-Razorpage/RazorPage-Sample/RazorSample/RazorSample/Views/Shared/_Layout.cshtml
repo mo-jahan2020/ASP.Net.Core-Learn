@@ -1,0 +1,302 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/Shared/_Layout.cshtml
+   هدف: قالب اصلی (Master Page) که همه صفحات از آن استفاده می‌کنند
+
+   📌 Layout در MVC چیست؟
+      Layout یک قالب مشترک است. به جای اینکه Navbar، Footer و
+      CSS را در هر صفحه تکرار کنیم، یک بار اینجا می‌نویسیم.
+      هر View که از این Layout استفاده کند، محتوایش جای
+      @RenderBody() قرار می‌گیرد.
+
+   📌 چرا _Shared قرار گرفته؟
+      فایل‌هایی که با _ شروع می‌شوند در Razor به صورت قرارداد
+      "نمایش مستقیم نمی‌شوند" — فقط توسط سایر View ها استفاده می‌شوند.
+      Shared یعنی بین همه Controller ها مشترک است.
+   ════════════════════════════════════════════════════════════════ *@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    @* عنوان صفحه — هر View مقدار ViewData["Title"] را تنظیم می‌کند *@
+    <title>@ViewData["Title"] - مدیریت کاربران</title>
+
+    @* ── Bootstrap 5 RTL ── *@
+    @* نسخه RTL مخصوص زبان‌های راست به چپ مثل فارسی و عربی است *@
+    @* تفاوت RTL با LTR: جهت نوشتار، padding/margin ها برعکس می‌شوند *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+
+    @* Bootstrap Icons — مجموعه آیکون‌های رایگان *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    @* فونت فارسی Vazirmatn از Google Fonts *@
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ── CSS Variables (متغیرهای CSS) ── */
+        /* با تعریف رنگ‌ها به عنوان متغیر، تغییر تم آسان می‌شود */
+        :root {
+            --primary: #2563eb;        /* آبی اصلی */
+            --primary-dark: #1d4ed8;   /* آبی تیره‌تر برای hover */
+            --accent: #f59e0b;         /* زرد برای تأکید */
+            --surface: #f8fafc;        /* پس‌زمینه صفحه */
+            --card-bg: #ffffff;        /* پس‌زمینه کارت‌ها */
+            --text-main: #1e293b;      /* رنگ متن اصلی */
+            --text-muted: #64748b;     /* رنگ متن کم‌رنگ */
+            --border: #e2e8f0;         /* رنگ حاشیه‌ها */
+            --success: #10b981;        /* سبز موفقیت */
+            --danger: #ef4444;         /* قرمز خطر */
+            --warning: #f59e0b;        /* زرد هشدار */
+        }
+
+        * { box-sizing: border-box; }  /* padding و border داخل عرض محاسبه شوند */
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;  /* فونت فارسی */
+            background-color: var(--surface);       /* استفاده از متغیر CSS */
+            color: var(--text-main);
+            min-height: 100vh;  /* حداقل ارتفاع کل پنجره */
+        }
+
+        /* ── Navbar (نوار ناوبری بالای صفحه) ── */
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 2px 12px rgba(37,99,235,.25);
+            padding: .75rem 1.5rem;
+        }
+        .navbar-custom .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .navbar-custom .navbar-brand i { color: var(--accent); }
+        .navbar-custom .nav-link {
+            color: rgba(255,255,255,.85) !important;
+            font-weight: 500;
+            transition: color .2s;  /* انیمیشن نرم برای تغییر رنگ */
+        }
+        .navbar-custom .nav-link:hover { color: #fff !important; }
+
+        /* ── محتوای اصلی ── */
+        .main-content {
+            padding: 2rem 1.5rem;
+            max-width: 1200px;  /* حداکثر عرض برای صفحات بزرگ */
+            margin: 0 auto;     /* وسط‌چین کردن */
+        }
+
+        /* ── هدر صفحه (عنوان + دکمه افزودن) ── */
+        .page-header {
+            display: flex;          /* Flexbox برای چیدمان افقی */
+            justify-content: space-between;  /* فاصله بین عنوان و دکمه */
+            align-items: center;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;        /* در موبایل به ردیف بعدی برو */
+            gap: .75rem;
+        }
+        .page-header h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
+
+        /* ── کارت (Card) — ظرف محتوا ── */
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 12px;    /* گوشه‌های گرد */
+            box-shadow: 0 1px 8px rgba(0,0,0,.05);  /* سایه ملایم */
+            background: var(--card-bg);
+        }
+        .card-header-custom {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 600;
+            font-size: .95rem;
+        }
+        .card-header-custom i { color: var(--primary); }
+
+        /* ── جدول ── */
+        .table-custom { margin: 0; font-size: .88rem; }
+        .table-custom thead th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: .85rem 1rem;
+            border: none;
+        }
+        .table-custom tbody td {
+            padding: .85rem 1rem;
+            vertical-align: middle;  /* محتوا در وسط عمودی */
+            border-color: var(--border);
+        }
+        .table-custom tbody tr:hover { background: #f8fafc; }  /* Hover effect */
+
+        /* ── دکمه‌های داخل جدول ── */
+        .btn-action { padding: .3rem .6rem; font-size: .78rem; border-radius: 6px; font-weight: 500; }
+
+        /* ── Pagination (صفحه‌بندی) ── */
+        .pagination-custom .page-link {
+            border-radius: 8px !important;
+            margin: 0 2px;
+            font-size: .85rem;
+            font-weight: 500;
+            color: var(--primary);
+            border-color: var(--border);
+        }
+        .pagination-custom .page-item.active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* ── فرم‌ها ── */
+        .form-card { max-width: 760px; margin: 0 auto; }
+        .form-label { font-weight: 600; font-size: .85rem; margin-bottom: .35rem; }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border-color: var(--border);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: .9rem;
+            padding: .55rem .85rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37,99,235,.12);  /* حلقه آبی هنگام Focus */
+        }
+
+        /* ── ردیف‌های جزئیات (صفحه Details) ── */
+        .detail-row {
+            display: flex;
+            padding: .85rem 0;
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-weight: 600; color: var(--text-muted); font-size: .82rem; min-width: 130px; }
+        .detail-value { color: var(--text-main); font-size: .9rem; }
+
+        /* ── Alert (پیام موفقیت/خطا) ── */
+        .alert-custom { border-radius: 10px; font-size: .875rem; border: none; }
+
+        /* ── دکمه‌های اصلی ── */
+        .btn-primary-custom {
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: .88rem;
+            padding: .55rem 1.25rem;
+            transition: background .2s;
+        }
+        .btn-primary-custom:hover { background: var(--primary-dark); color: #fff; }
+
+        .btn-outline-secondary-custom {
+            border: 1.5px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: .88rem;
+            padding: .55rem 1.25rem;
+            background: #fff;
+            transition: border-color .2s;
+        }
+        .btn-outline-secondary-custom:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 1.25rem;
+            font-size: .78rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        /* ── جعبه حذف (صفحه Delete) ── */
+        .delete-box {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .delete-icon { font-size: 3rem; color: var(--danger); }
+    </style>
+</head>
+<body>
+
+@* ── Navbar ── *@
+<nav class="navbar navbar-custom navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/User">
+            <i class="bi bi-people-fill me-2"></i>مدیریت کاربران
+        </a>
+        @* دکمه Hamburger برای موبایل — Bootstrap آن را مدیریت می‌کند *@
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/User"><i class="bi bi-grid-3x3-gap me-1"></i>لیست کاربران</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/User/Create"><i class="bi bi-person-plus me-1"></i>افزودن کاربر</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@* ── محتوای اصلی ── *@
+<main class="main-content">
+
+    @* ── نمایش پیام‌های موفقیت (TempData) ── *@
+    @* TempData فقط برای یک Request زنده است — مثل پیام "کاربر ذخیره شد" *@
+    @* != null بررسی می‌کند آیا پیامی وجود دارد *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-custom alert-dismissible fade show mb-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+            @* دکمه بستن Alert *@
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @* نمایش پیام‌های خطا (اگر داشتیم) *@
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-custom alert-dismissible fade show mb-3" role="alert">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @* ════════════════════════════════════════════════════════════
+       @RenderBody() — قلب Layout
+       محتوای هر View در اینجا قرار می‌گیرد.
+       مثلاً وقتی Index.cshtml رندر می‌شود، تمام HTML آن
+       جای این دستور قرار می‌گیرد.
+       ════════════════════════════════════════════════════════════ *@
+    @RenderBody()
+</main>
+
+<footer>
+    <span>© @DateTime.Now.Year — مدیریت کاربران | ساخته شده با ASP.NET Core 10.0 MVC</span>
+</footer>
+
+@* ── JavaScript های Bootstrap ── *@
+@* bundle.min.js شامل Popper.js هم هست (برای Dropdown، Tooltip و...) *@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+@* ── Section برای اسکریپت‌های اختصاصی هر صفحه ── *@
+@* required: false یعنی صفحه‌هایی که Scripts ندارند خطا نمی‌دهند *@
+@* صفحات Create و Edit از این Section برای Validation استفاده می‌کنند *@
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

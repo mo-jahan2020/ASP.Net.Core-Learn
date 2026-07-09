@@ -1,0 +1,113 @@
+@* ════════════════════════════════════════════════════════════════
+   فایل: Views/User/Details.cshtml
+   هدف: نمایش کامل جزئیات یک کاربر (فقط خواندنی - بدون فرم)
+
+   📌 این View فقط داده نمایش می‌دهد و ورودی ندارد.
+      Model.Name، Model.Email و... مستقیماً نمایش داده می‌شوند.
+
+   📌 بررسی Nullable با HasValue:
+      BirthDate از نوع DateTime? است (nullable).
+      قبل از نمایش باید بررسی کنیم null نباشد:
+      Model.BirthDate.HasValue → آیا مقدار دارد؟
+      Model.BirthDate.Value → مقدار واقعی
+   ════════════════════════════════════════════════════════════════ *@
+
+@model RazorSample.Models.UserInputModel
+
+@{
+    ViewData["Title"] = "جزئیات کاربر";
+}
+
+<div class="page-header">
+    <div>
+        <h1><i class="bi bi-person-circle me-2 text-info"></i>جزئیات کاربر</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/User">لیست کاربران</a></li>
+                <li class="breadcrumb-item active">@Model.Name @Model.Family</li>
+            </ol>
+        </nav>
+    </div>
+    @* دکمه‌های عملیات در هدر صفحه *@
+    <div class="d-flex gap-2">
+        <a href="/User/Edit/@Model.Id" class="btn btn-warning text-white fw-semibold">
+            <i class="bi bi-pencil me-1"></i>ویرایش
+        </a>
+        <a href="/User/Delete/@Model.Id" class="btn btn-danger fw-semibold">
+            <i class="bi bi-trash me-1"></i>حذف
+        </a>
+    </div>
+</div>
+
+<div class="card form-card">
+    <div class="card-header-custom">
+        <i class="bi bi-info-circle"></i>
+        <span>اطلاعات کامل کاربر</span>
+        <span class="badge bg-info-subtle text-info rounded-pill ms-auto">شناسه: @Model.Id</span>
+    </div>
+    <div class="card-body p-4">
+
+        @* ── آواتار و نام — بخش معرفی کاربر ── *@
+        <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+            @* آواتار دایره‌ای با اولین حرف نام — Model.Name[0] *@
+            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold"
+                 style="width:64px;height:64px;font-size:1.5rem;flex-shrink:0">
+                @Model.Name[0]
+            </div>
+            <div>
+                <h4 class="mb-0 fw-bold">@Model.Name @Model.Family</h4>
+                <span class="text-muted" style="font-size:.85rem">@Model.Email</span>
+            </div>
+        </div>
+
+        @* ── ردیف‌های جزئیات — هر فیلد یک ردیف ── *@
+        @* کلاس detail-row در _Layout.cshtml تعریف شده *@
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-person me-2 text-primary"></i>نام</div>
+            <div class="detail-value">@Model.Name</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-person me-2 text-primary"></i>نام خانوادگی</div>
+            <div class="detail-value">@Model.Family</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-calendar me-2 text-primary"></i>تاریخ تولد</div>
+            @* بررسی Nullable — عملگر سه‌گانه (ternary operator): شرط ? مقدار_اگر_true : مقدار_اگر_false *@
+            <div class="detail-value">
+                @(Model.BirthDate.HasValue ? Model.BirthDate.Value.ToString("yyyy/MM/dd") : "ثبت نشده")
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-geo-alt me-2 text-primary"></i>شهر</div>
+            <div class="detail-value">@Model.City</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-envelope me-2 text-primary"></i>ایمیل</div>
+            @* dir="ltr" برای نمایش صحیح ایمیل از چپ به راست *@
+            <div class="detail-value" dir="ltr">
+                <a href="mailto:@Model.Email">@Model.Email</a>
+            </div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-telephone me-2 text-primary"></i>تلفن</div>
+            <div class="detail-value" dir="ltr">@Model.Tel</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label"><i class="bi bi-house me-2 text-primary"></i>آدرس</div>
+            <div class="detail-value">@Model.Address</div>
+        </div>
+    </div>
+
+    <div class="card-body border-top pt-3">
+        <a href="/User" class="btn btn-outline-secondary-custom">
+            <i class="bi bi-arrow-right me-1"></i>بازگشت به لیست
+        </a>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- فریم‌ورک هدف پروژه -->
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- فعال‌سازی Nullable Reference Types برای کاهش خطاهای null -->
+    <Nullable>enable</Nullable>
+    <!-- وارد شدن خودکار usingهای پرکاربرد -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- این پکیج برای Swagger/OpenAPI استفاده می‌شود -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+  </ItemGroup>
+
+</Project>

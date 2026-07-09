@@ -1,0 +1,110 @@
+@* ----------------------------------------------------------------------------
+   صفحه سبد خرید (Cart.cshtml)
+   ----------------------------------------------------------------------------
+   - نمایش آیتم‌های موجود در سبد
+   - امکان حذف آیتم (با لینک GET)
+   - دکمه "خالی کردن سبد" (با فرم POST - چون در همان صفحه است)
+   - دکمه "ثبت سفارش" برای ادامه به صفحه ثبت سفارش
+
+   نکته فنی: حذف آیتم از لینک GET استفاده می‌کند (نه فرم POST) چون:
+   1) ساده‌تر است
+   2) نیازی به Antiforgery Token نیست
+   3) کاربر می‌تواند با Back/Forward مرورگر کار کند
+   ---------------------------------------------------------------------------- *@
+
+@page
+@model SportsStore.Pages.CartModel
+@{
+    ViewData["Title"] = "سبد خرید";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">سبد خرید شما</h1>
+    </div>
+</div>
+
+@if (Model.Cart?.Lines.Any() == true)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام محصول</th>
+                    <th>دسته‌بندی</th>
+                    <th class="text-center">قیمت واحد</th>
+                    <th class="text-center">تعداد</th>
+                    <th class="text-center">جمع</th>
+                    <th class="text-center">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int index = 1; }
+                @foreach (var line in Model.Cart.Lines)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@line.Product.Name</td>
+                        <td>@line.Product.Category</td>
+                        <td class="text-center">@line.Product.Price.ToString("C")</td>
+                        <td class="text-center">@line.Quantity</td>
+                        <td class="text-center text-success fw-bold">
+                            @((line.Product.Price * line.Quantity).ToString("C"))
+                        </td>
+                        <td class="text-center">
+                            @* --- دکمه حذف از سبد (لینک GET) --- *@
+                            @* asp-page-handler="Remove": نام Handler در PageModel *@
+                            @* asp-route-id: شناسه محصول برای حذف *@
+                            <a asp-page="/Cart"
+                               asp-page-handler="Remove"
+                               asp-route-id="@line.Product.ProductID"
+                               asp-route-returnUrl="@Model.ReturnUrl"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('آیا از حذف این محصول از سبد مطمئن هستید؟')">
+                                حذف
+                            </a>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-active fw-bold">
+                    <td colspan="5" class="text-end">مجموع کل:</td>
+                    <td class="text-center text-success">
+                        @Model.Cart.ComputeTotalValue().ToString("C")
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex gap-2 mt-3 flex-wrap">
+        <a asp-page="/Order/Create" class="btn btn-success btn-lg">
+            ادامه و ثبت سفارش
+        </a>
+        <a asp-page="/Products/Index" class="btn btn-outline-primary btn-lg">
+            ادامه خرید
+        </a>
+
+        @* --- دکمه خالی کردن سبد (فرم POST) --- *@
+        @* این فرم در همان صفحه است، پس Antiforgery Token به درستی کار می‌کند *@
+        <form method="post" asp-page-handler="Clear" class="d-inline ms-auto">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger btn-lg"
+                    onclick="return confirm('آیا از خالی کردن کل سبد مطمئن هستید؟')">
+                خالی کردن سبد
+            </button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center py-5">
+        <h4>سبد خرید شما خالی است</h4>
+        <p class="mb-3">برای خرید، به صفحه محصولات بروید و آیتم‌ها را به سبد اضافه کنید.</p>
+        <a asp-page="/Products/Index" class="btn btn-primary">مشاهده محصولات</a>
+    </div>
+}

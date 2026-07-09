@@ -1,0 +1,19 @@
+@page "/Categories/Create"
+@model Code_Generation1.Pages.Categories.CreateModel
+@{
+	ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<form method="post">
+	<div class="form-group">
+		<label asp-for="Category.Name"></label>
+		<input asp-for="Category.Name" class="form-control" />
+		<span asp-validation-for="Category.Name" class="text-danger"></span>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-page="/Categories/Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+<partial name="_ValidationScriptsPartial" />

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Test_App1.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int pageSize = ViewBag.PageSize ?? 5;
+    int totalCount = ViewBag.TotalCount ?? 1;
+}
+
+<h2>Products</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductID</td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Price.ToString("C")</td>
+                <td>@product.Category</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (pageNumber > 1)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = 1, pageSize = pageSize })">First</a>
+        <a href="@Url.Action("Index", new { pageNumber = pageNumber - 1, pageSize = pageSize })">Previous</a>
+    }
+    @for (int i = 1; i <= totalCount; i++)
+    {
+        if (i == pageNumber)
+        {
+            <span>@i</span>
+        }
+        else
+        {
+            <a href="@Url.Action("Index", new { pageNumber = i, pageSize = pageSize })">@i</a>
+        }
+    }
+    @if (pageNumber < totalCount)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = pageNumber + 1, pageSize = pageSize })">Next</a>
+        <a href="@Url.Action("Index", new { pageNumber = totalCount, pageSize = pageSize })">Last</a>
+    }
+</div>

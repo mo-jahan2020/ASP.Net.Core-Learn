@@ -1,0 +1,308 @@
+@* ----------------------------------------------------------------------------
+   صفحه وضعیت دیتابیس (Pages/DbStatus.cshtml)
+   ----------------------------------------------------------------------------
+   این صفحه برای عیب‌یابی مشکلات اتصال به دیتابیس طراحی شده است.
+   کاربر می‌تواند:
+   - ConnectionString فعلی را ببیند
+   - وضعیت اتصال به هر دیتابیس را بررسی کند
+   - لیست Migration های اعمال شده را ببیند
+   - در صورت نیاز Migration ها را دستی اعمال کند
+
+   نکته: این صفحه فقط در محیط Development و فقط برای Admin قابل دسترس است.
+   ---------------------------------------------------------------------------- *@
+
+@page
+@model SportsStore.Pages.DbStatusModel
+@{
+    ViewData["Title"] = "وضعیت دیتابیس";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">وضعیت دیتابیس و عیب‌یابی</h1>
+
+        @if (!Model.IsDevelopment)
+        {
+            <div class="alert alert-warning">
+                <strong>توجه:</strong> این صفحه فقط در محیط Development قابل استفاده است.
+            </div>
+        }
+    </div>
+</div>
+
+@* --- نمایش ConnectionString ها --- *@
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">۱. ConnectionString های فعلی</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <tr>
+                <th style="width: 20%;">دیتابیس محصولات (Store)</th>
+                <td><code>@Model.StoreConnectionString</code></td>
+            </tr>
+            <tr>
+                <th>دیتابیس Identity</th>
+                <td><code>@Model.IdentityConnectionString</code></td>
+            </tr>
+        </table>
+        <small class="text-muted">
+            این مقادیر از فایل <code>appsettings.json</code> خوانده می‌شوند.
+            اگر می‌خواهید تغییر دهید، فایل را ویرایش کرده و برنامه را ری‌استارت کنید.
+        </small>
+    </div>
+</div>
+
+@* --- وضعیت اتصال --- *@
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">۲. وضعیت اتصال به دیتابیس</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>دیتابیس</th>
+                    <th class="text-center">قابل اتصال؟</th>
+                    <th>Provider</th>
+                    <th class="text-center">رکوردها</th>
+                    <th>پیام</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Store</strong><br /><small class="text-muted">محصولات و سفارشات</small></td>
+                    <td class="text-center">
+                        @if (Model.StoreCanConnect)
+                        {
+                            <span class="badge bg-success">✓ بله</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">✗ خیر</span>
+                        }
+                    </td>
+                    <td><code>@Model.StoreProviderName</code></td>
+                    <td class="text-center">
+                        @if (Model.StoreCanConnect)
+                        {
+                            <span class="badge bg-info">@Model.StoreProductCount محصول</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td>@(Model.StoreCanConnect ? "اتصال موفق ✓" : "اتصال ناموفق")</td>
+                </tr>
+                <tr>
+                    <td><strong>Identity</strong><br /><small class="text-muted">کاربران و نقش‌ها</small></td>
+                    <td class="text-center">
+                        @if (Model.IdentityCanConnect)
+                        {
+                            <span class="badge bg-success">✓ بله</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">✗ خیر</span>
+                        }
+                    </td>
+                    <td><code>@Model.IdentityProviderName</code></td>
+                    <td class="text-center">
+                        @if (Model.IdentityCanConnect)
+                        {
+                            <span class="badge bg-info">@Model.IdentityUserCount کاربر</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td>@(Model.IdentityCanConnect ? "اتصال موفق ✓" : "اتصال ناموفق")</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @if (Model.StoreCanConnect && Model.IdentityCanConnect)
+        {
+            <div class="alert alert-success mt-3 mb-0">
+                <strong>✓ عالی!</strong> هر دو دیتابیس متصل و قابل استفاده هستند.
+                اگر در SSMS دیتابیس‌ها را نمی‌بینید، احتمالاً به <strong>Server name اشتباه</strong>
+                وصل می‌شوید. ConnectionString بالا را دقیقاً در SSMS وارد کنید.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger mt-3 mb-0">
+                <strong>⚠ مشکل اتصال!</strong> یکی از دیتابیس‌ها قابل اتصال نیست.
+                ConnectionString یا SQL Server Service را بررسی کنید.
+            </div>
+        }
+    </div>
+</div>
+
+@* --- Migration ها --- *@
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">۳. وضعیت Migration ها</h5>
+    </div>
+    <div class="card-body">
+        <h6>دیتابیس Store:</h6>
+        <ul class="list-group list-group-flush mb-3">
+            @if (Model.StoreAppliedMigrations.Any())
+            {
+                @foreach (var m in Model.StoreAppliedMigrations)
+                {
+                    <li class="list-group-item list-group-item-success small">
+                        ✓ @m (اعمال شده)
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="list-group-item small text-muted">هیچ Migration اعمال نشده</li>
+            }
+            @foreach (var m in Model.StorePendingMigrations)
+            {
+                <li class="list-group-item list-group-item-warning small">
+                    ⏳ @m (در انتظار اعمال)
+                </li>
+            }
+        </ul>
+
+        <h6>دیتابیس Identity:</h6>
+        <ul class="list-group list-group-flush">
+            @if (Model.IdentityAppliedMigrations.Any())
+            {
+                @foreach (var m in Model.IdentityAppliedMigrations)
+                {
+                    <li class="list-group-item list-group-item-success small">
+                        ✓ @m (اعمال شده)
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="list-group-item small text-muted">هیچ Migration اعمال نشده</li>
+            }
+            @foreach (var m in Model.IdentityPendingMigrations)
+            {
+                <li class="list-group-item list-group-item-warning small">
+                    ⏳ @m (در انتظار اعمال)
+                </li>
+            }
+        </ul>
+
+        @* --- دکمه اعمال دستی Migration --- *@
+        @if (Model.IsDevelopment && User.IsInRole("Admin"))
+        {
+            <form method="post" asp-page-handler="ApplyMigrations" class="mt-3">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-warning"
+                        onclick="return confirm('آیا از اعمال Migration ها مطمئن هستید؟')">
+                    اعمال Migration های معلق
+                </button>
+            </form>
+            @if (!string.IsNullOrEmpty(Model.MigrationResult))
+            {
+                <div class="alert alert-info mt-2 small">
+                    @Model.MigrationResult
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@* --- راهنمای عیب‌یابی --- *@
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">۴. راهنمای عیب‌یابی - مهم!</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <strong>📍 اگر دیتابیس در SSMS دیده نمی‌شود:</strong>
+            مطمئن شوید در SSMS به <strong>همان سروری</strong> وصل می‌شوید که
+            در ConnectionString بالا نوشته شده. مثلاً اگر ConnectionString
+            <code>Server=.\SQLEXPRESS</code> است، در SSMS هم باید Server name
+            را <code>.\SQLEXPRESS</code> وارد کنید - نه <code>(localdb)\MSSQLLocalDB</code>
+            یا <code>.</code> (این‌ها سرورهای متفاوتی هستند!)
+        </div>
+
+        <h6 class="mt-4">دیتابیس‌ها کجا ذخیره می‌شوند؟</h6>
+        <p>
+            SQL Server Express فایل‌های دیتابیس (با پسوند <code>.mdf</code>) را در مسیر زیر ذخیره می‌کند:
+        </p>
+        <pre class="bg-light p-2 rounded"><code>C:\Program Files\Microsoft SQL Server\MSSQLxx.SQLEXPRESS\MSSQL\DATA\</code></pre>
+        <p>یا (بسته به نسخه):</p>
+        <pre class="bg-light p-2 rounded"><code>C:\Users\&lt;YourUser&gt;\AppData\Local\Microsoft\Microsoft SQL Server Local DB\Instances\</code></pre>
+
+        <h6 class="mt-4">مراحل یافتن دیتابیس‌ها:</h6>
+        <ol>
+            <li>
+                <strong>بررسی SQL Server Service:</strong>
+                در ویندوز <code>Win+R</code> → <code>services.msc</code> → Enter
+                سرویس زیر را پیدا کنید:
+                <ul>
+                    <li><code>SQL Server (SQLEXPRESS)</code> - برای نسخه Express</li>
+                    <li><code>SQL Server (MSSQLSERVER)</code> - برای نسخه کامل</li>
+                    <li><code>SQL Server Browser</code> - باید Running باشد</li>
+                </ul>
+            </li>
+            <li>
+                <strong>اتصال صحیح در SSMS:</strong>
+                <ul>
+                    <li>اگر ConnectionString شما <code>Server=.\SQLEXPRESS</code> است، در SSMS Server name را <code>.\SQLEXPRESS</code> وارد کنید</li>
+                    <li>اگر ConnectionString شما <code>Server=(localdb)\MSSQLLocalDB</code> است، در SSMS Server name را <code>(localdb)\MSSQLLocalDB</code> وارد کنید</li>
+                    <li>Authentication: <strong>Windows Authentication</strong></li>
+                </ul>
+            </li>
+            <li>
+                <strong>بررسی Instance Name:</strong>
+                برای دیدن لیست تمام SQL Server instances روی سیستم:
+                <ul>
+                    <li>Command Prompt را باز کنید</li>
+                    <li>دستور <code>sqlcmd -L</code> را اجرا کنید</li>
+                    <li>یا در PowerShell: <code>Get-Service -Name "*SQL*"</code></li>
+                </ul>
+            </li>
+            <li>
+                <strong>ری‌استارت برنامه:</strong>
+                <code>Ctrl+C</code> در Console، سپس دوباره <code>dotnet run</code>
+            </li>
+        </ol>
+    </div>
+</div>
+
+@* --- کوئری‌های مفید SSMS --- *@
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">۵. کوئری‌های مفید برای بررسی دیتابیس (در SSMS)</h5>
+    </div>
+    <div class="card-body">
+        <p>پس از اتصال به <code>.\SQLEXPRESS</code> در SSMS، یک New Query باز کنید و این کوئری‌ها را اجرا کنید:</p>
+
+        <h6>لیست همه دیتابیس‌ها:</h6>
+        <pre class="bg-light p-2 rounded"><code>SELECT name FROM sys.databases ORDER BY name;</code></pre>
+
+        <h6 class="mt-3">تعداد محصولات در دیتابیس SportsStore:</h6>
+        <pre class="bg-light p-2 rounded"><code>USE SportsStore;
+SELECT COUNT(*) AS ProductCount FROM Products;
+SELECT * FROM Products;</code></pre>
+
+        <h6 class="mt-3">لیست کاربران Identity:</h6>
+        <pre class="bg-light p-2 rounded"><code>USE SportsStoreIdentity;
+SELECT UserName, Email FROM AspNetUsers;
+SELECT Name FROM AspNetRoles;</code></pre>
+
+        <h6 class="mt-3">بررسی نقش‌های کاربر Admin:</h6>
+        <pre class="bg-light p-2 rounded"><code>USE SportsStoreIdentity;
+SELECT u.UserName, r.Name AS RoleName
+FROM AspNetUsers u
+JOIN AspNetUserRoles ur ON u.Id = ur.UserId
+JOIN AspNetRoles r ON ur.RoleId = r.Id;</code></pre>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-page="/Products/Index" class="btn btn-primary">بازگشت به فروشگاه</a>
+</div>
