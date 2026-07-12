@@ -1,16 +1,31 @@
-﻿@model CityViewModel
+@* ================================================================= *@
+@* CitySummary/Default.cshtml - View پیش‌فرض ViewComponent CitySummary *@
+@* ================================================================= *@
+@* این View توسط CitySummary ViewComponent (که در Components/CitySummary.cs است) *@
+@* رندر می‌شود. این ViewComponent در Home/Index.cshtml با <vc:city-summary /> استفاده می‌شود. *@
+@* نکته‌ی مهم: این View از ViewBag.Theme برای تنظیم رنگ استفاده می‌کند.    *@
+@* ViewBag.Theme در متد Invoke از ViewComponent تنظیم می‌شود.            *@
+@* ================================================================= *@
 
+@* @model: نوع Model - CityViewModel                                   *@
+@model CityViewModel
+
+@* جدول نمایش خلاصه - رنگ پس‌زمینه بر اساس themeName داینامیک است    *@
+@* bg-@ViewBag.Theme: کلاس بوت‌استرپ به صورت داینامیک ساخته می‌شود      *@
+@* مثلاً اگر themeName="success" باشد، کلاس "bg-success" ساخته می‌شود   *@
 <table class="table table-sm table-bordered text-white bg-@ViewBag.Theme">
     <thead>
         <tr><th colspan="2">Cities Summary</th></tr>
     </thead>
     <tbody>
+        @* نمایش تعداد شهرها                                            *@
         <tr>
             <td>Cities:</td>
             <td class="text-right">
                 @Model?.Cities
             </td>
         </tr>
+        @* نمایش جمعیت با فرمت هزارگان                                  *@
         <tr>
             <td>Population:</td>
             <td class="text-right">

@@ -1,13 +1,34 @@
-﻿@model string
-@{ 
+@* ================================================================= *@
+@* Views/Home/Html.cshtml - View نمایش HTML خام                       *@
+@* ================================================================= *@
+@* این View نحوه‌ی نمایش HTML به صورت خام (بدون Encoding) را نشان می‌دهد. *@
+@* در Razor، به طور پیش‌فرض محتوای خروجی HTML-Encoded می‌شود (برای امنیت). *@
+@* با استفاده از Html.Raw می‌توان این رفتار را غیرفعال کرد.              *@
+@* هشدار: استفاده از Html.Raw با داده‌های نامعتبر می‌تواند خطرناک باشد *@
+@*   (XSS - Cross-Site Scripting).                                       *@
+@* ================================================================= *@
+
+@* @model: تعریف نوع Model - یک رشته (string)                          *@
+@model string
+
+@* Razor Block برای تنظیم Layout                                        *@
+@*   Layout = null: این View از هیچ Layout استفاده نمی‌کند              *@
+@*   یعنی ساختار کامل HTML در همین فایل تعریف می‌شود                    *@
+@{
     Layout = null;
 }
+
+@* سند HTML کامل                                                      *@
 <!DOCTYPE html>
 <html>
 <head>
+    @* بارگذاری CSS بوت‌استرپ                                          *@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* Html.Raw(Model): نمایش محتوای Model به صورت HTML خام             *@
+    @* بدون Html.Raw، تگ‌های HTML به صورت متن ساده نمایش داده می‌شوند   *@
+    @* مثلاً: "<h3>text</h3>" به جای "text" بزرگ، به صورت کد نمایش داده می‌شود *@
     <div class="bg-secondary text-white text-center m-2 p-2">@Html.Raw(Model)</div>
 </body>
 </html>

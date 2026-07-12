@@ -1,25 +1,47 @@
-﻿@page
+@* ================================================================= *@
+@* HandlerSelector.cshtml - صفحه‌ای با چند Handler                      *@
+@* ================================================================= *@
+@* این صفحه نحوه‌ی استفاده از Multiple Handlerها در Razor Page را نشان می‌دهد. *@
+@* با استفاده از query string (?handler=xxx) می‌توان Handler خاصی را فراخوانی کرد. *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page                                              *@
+@* @model: مشخص کردن PageModel (که در همین فایل با @functions تعریف شده) *@
+@* @using: اضافه کردن فضاهای نام مورد نیاز                               *@
+@page
 @model HandlerSelectorModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using Microsoft.EntityFrameworkCore
 
+@* سند HTML با CSS بوت‌استرپ                                           *@
 <!DOCTYPE html>
 <html>
 <head>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <div class="bg-primary text-white text-center m-2 p-2">Selector</div>
+
     <div class="m-2">
+        @* جدول نمایش اطلاعات محصول                                       *@
         <table class="table table-sm table-striped table-bordered">
             <tbody>
+                @* نمایش اطلاعات محصول جاری                               *@
                 <tr><th>Name</th><td>@Model.Product?.Name</td></tr>
+                @* توجه: در اینجا به جای Price، اشتباهاً Name نوشته شده (برای تست) *@
                 <tr><th>Price</th><td>@Model.Product?.Name</td></tr>
                 <tr><th>Category</th><td>@Model.Product?.Category?.Name</td></tr>
                 <tr><th>Supplier</th><td>@Model.Product?.Supplier?.Name</td></tr>
             </tbody>
         </table>
+
+        @* لینک به Handler پیش‌فرض (بدون handler در URL)                *@
+        @* /handlerselector: فراخوانی OnGetAsync                         *@
         <a href="/handlerselector" class="btn btn-primary">Standard</a>
+
+        @* لینک به Handler سفارشی (با handler=related در URL)            *@
+        @* /handlerselector?handler=related: فراخوانی OnGetRelatedAsync   *@
         <a href="/handlerselector?handler=related" class="btn btn-primary">
             Related
         </a>
@@ -27,26 +49,43 @@
 </body>
 </html>
 
+@* Razor Block برای تعریف PageModel در همان فایل                        *@
+@* این الگو برای صفحات کوچک مفید است - همه چیز در یک فایل               *@
 @functions{
 
+    @* تعریف کلاس PageModel (به جای فایل .cshtml.cs جداگانه)             *@
     public class HandlerSelectorModel: PageModel {
+        @* فیلد خصوصی برای DataContext                                   *@
         private DataContext context;
 
+        @* ویژگی برای نگهداری محصول جاری                                 *@
         public Product? Product { get; set; }
 
+        @* سازنده                                                       *@
         public HandlerSelectorModel(DataContext ctx) {
             context = ctx;
         }
 
+        @* Handler پیش‌فرض (هنگام درخواست GET عادی)                     *@
+        @* اگر URL شامل ?handler=Xxx نباشد، این متد فراخوانی می‌شود     *@
         public async Task OnGetAsync(long id = 1) {
+            @* فقط محصول را بدون اطلاعات مرتبط بارگذاری می‌کند           *@
             Product = await context.Products.FindAsync(id);
         }
 
+        @* Handler سفارشی (با ?handler=related فراخوانی می‌شود)          *@
+        @* نام: OnGet + Related + Async = OnGetRelatedAsync               *@
+        @* ASP.NET Core این نام‌گذاری را به طور خودکار تشخیص می‌دهد      *@
         public async Task OnGetRelatedAsync(long id = 1) {
+            @* بارگذاری محصول به همراه اطلاعات دسته‌بندی و تأمین‌کننده  *@
+            @* Include: Eager Loading - بارگذاری همزمان داده‌های مرتبط  *@
+            @* FirstOrDefaultAsync: اولین مورد یا null اگر پیدا نشد       *@
             Product = await context.Products
                 .Include(p => p.Supplier)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
+
+            @* حذف ارجاع معکوس برای جلوگیری از حلقه در JSON              *@
             if (Product != null && Product.Supplier != null) {
                 Product.Supplier.Products = null;
             }

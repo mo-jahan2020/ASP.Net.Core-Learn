@@ -1,22 +1,45 @@
-﻿<!DOCTYPE html>
+@* ================================================================= *@
+@* Views/Shared/_Layout.cshtml - Layout اصلی برای الگوی MVC           *@
+@* ================================================================= *@
+@* این Layout توسط اکثر Viewهای MVC استفاده می‌شود.                      *@
+@* در Views/_ViewStart.cshtml به عنوان Layout پیش‌فرض تنظیم شده.        *@
+@* این Layout با Layout مربوط به Razor Pages (Pages/Shared/_Layout.cshtml)  *@
+@* متفاوت است - هر الگو (MVC و Pages) Layout مخصوص به خود دارد.         *@
+@* ================================================================= *@
+
+@* سند HTML کامل                                                       *@
+<!DOCTYPE html>
 <html>
 <head>
+    @* عنوان صفحه از ViewBag.Title                                      *@
     <title>@ViewBag.Title</title>
+
+    @* بارگذاری CSS بوت‌استرپ                                          *@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>    
+<body>
+    @* یک جدول برای نمایش محتوای صفحه                                   *@
     <div class="m-2">
         <table class="table table-sm table-striped table-bordered">
+            @* سرصفحه‌ی جدول - شامل Section به نام Header                *@
             <thead>
                 <tr>
+                    @* colspan="2": ادغام دو ستون                        *@
                     <th class="bg-primary text-white text-center" colspan="2">
+                        @* @RenderSection: رندر کردن Section تعریف‌شده در View *@
+                        @* "Header": نام Section                         *@
+                        @* false: این Section اختیاری است                *@
+                        @* اگر View این Section را تعریف نکرده باشد، خطا نمی‌دهد *@
                         @RenderSection("Header", false)
                     </th>
                 </tr>
             </thead>
+            @* بدنه‌ی جدول - محتوای اصلی View                             *@
             <tbody>
+                @* @RenderBody(): محتوای اصلی View در اینجا رندر می‌شود *@
                 @RenderBody()
             </tbody>
+            @* پاورقی جدول - شامل Section به نام Footer                  *@
             <tfoot>
                 <tr>
                     <th class="bg-primary text-white text-center" colspan="2">
@@ -26,9 +49,14 @@
             </tfoot>
         </table>
     </div>
+
+    @* نمایش Section اختیاری Summary                                     *@
+    @* IsSectionDefined: بررسی اینکه آیا Section تعریف شده است یا نه   *@
     @if (IsSectionDefined("Summary")) {
+        @* اگر Section تعریف شده، آن را رندر کن                         *@
         @RenderSection("Summary", false)
-    } else { 
+    } else {
+        @* در غیر این صورت، پیام پیش‌فرض نمایش بده                      *@
         <div class="bg-info text-center text-white m-2 p-2">
             This is the default summary
         </div>

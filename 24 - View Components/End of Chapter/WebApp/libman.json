@@ -1,9 +1,33 @@
 {
+  // =====================================================================
+  // libman.json - تنظیمات Library Manager
+  // =====================================================================
+  // Library Manager (LibMan) ابزاری برای دانلود و مدیریت کتابخانه‌های
+  // سمت کلاینت (Client-Side Libraries) مثل jQuery، Bootstrap و ... است.
+  // این ابزار جایگزین سبک‌تری برای npm/yarn در پروژه‌های ASP.NET Core است.
+  // کتابخانه‌ها در فولدر wwwroot/lib ذخیره می‌شوند.
+  // =====================================================================
+
+  // version: نسخه‌ی schema فایل تنظیمات LibMan
   "version": "1.0",
+
+  // defaultProvider: ارائه‌دهنده‌ی پیش‌فرض برای دانلود کتابخانه‌ها
+  // "cdnjs": سرویس رایگان CDN.js برای دانلود کتابخانه‌ها
+  //   (https://cdnjs.com)
+  // گزینه‌های دیگر: "filesystem" (از سیستم فایل محلی)، "unpkg" و ...
   "defaultProvider": "cdnjs",
+
+  // libraries: لیست کتابخانه‌های مورد نیاز پروژه
   "libraries": [
     {
+      // library: نام کتابخانه با نسخه‌ی مشخص
+      // "bootstrap@5.1.3" یعنی Bootstrap نسخه‌ی 5.1.3
       "library": "bootstrap@5.1.3",
+
+      // destination: مسیر ذخیره‌سازی فایل‌های کتابخانه
+      // "wwwroot/lib/bootstrap" یعنی در فولدر wwwroot/lib/bootstrap
+      // این فولدر در سرور وب قابل دسترسی است
+      // فایل‌ها از طریق آدرس /lib/bootstrap/... در دسترس خواهند بود
       "destination": "wwwroot/lib/bootstrap"
     }
   ]

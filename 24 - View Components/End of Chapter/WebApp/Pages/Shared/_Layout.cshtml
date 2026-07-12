@@ -1,13 +1,29 @@
-﻿<!DOCTYPE html>
+@* ================================================================= *@
+@* _Layout.cshtml - الگوی مشترک (Layout) برای Razor Pages             *@
+@* ================================================================= *@
+@* Layout یک قالب HTML مشترک است که برای چندین صفحه استفاده می‌شود.    *@
+@* این Layout در فایل _ViewStart.cshtml به عنوان Layout پیش‌فرض تنظیم شده. *@
+@* محتوای اختصاصی هر صفحه در جایی که @RenderBody() قرار دارد، جایگذاری می‌شود. *@
+@* ================================================================= *@
+
+<!DOCTYPE html>
 <html>
 <head>
+    @* بارگذاری CSS بوت‌استرپ                                           *@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    @* عنوان صفحه - از ViewBag.Title خوانده می‌شود                      *@
+    @* اگر ViewBag.Title تنظیم نشده باشد، عنوان مرورگر خالی خواهد بود *@
     <title>@ViewBag.Title</title>
 </head>
 <body>
+    @* هدر صفحه - نشان می‌دهد این یک Razor Page است                      *@
     <h5 class="bg-secondary text-white text-center m-2 p-2">
         Razor Page
     </h5>
+
+    @* @RenderBody(): محتوای اختصاصی صفحه در اینجا قرار می‌گیرد         *@
+    @* هر صفحه‌ای که از این Layout استفاده می‌کند، محتوایش اینجا رندر می‌شود *@
     @RenderBody()
 </body>
 </html>

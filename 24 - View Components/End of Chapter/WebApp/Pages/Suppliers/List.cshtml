@@ -1,35 +1,57 @@
-﻿@page "/lists/suppliers"
+@* ================================================================= *@
+@* List.cshtml - صفحه‌ی نمایش لیست تأمین‌کنندگان                       *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page با مسیر سفارشی "/lists/suppliers"           *@
+@*   به جای مسیر پیش‌فرض /Suppliers/List، این صفحه در /lists/suppliers قابل دسترسی است *@
+@* @model: مشخص کردن PageModel                                          *@
+@* @using: اضافه کردن فضاهای نام                                        *@
+@page "/lists/suppliers"
 @model ListModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using WebApp.Models;
 
+@* سند HTML                                                            *@
 <!DOCTYPE html>
 <html>
 <head>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <h5 class="bg-primary text-white text-center m-2 p-2">Suppliers</h5>
+
+    @* لیست تأمین‌کنندگان                                                *@
     <ul class="list-group m-2">
+        @* حلقه روی نام تأمین‌کنندگان و نمایش هر کدام در یک آیتم لیست   *@
         @foreach (string s in Model.Suppliers) {
-            <li class="list-group-item">@s</li>                
+            <li class="list-group-item">@s</li>
         }
     </ul>
 </body>
 </html>
 
+@* تعریف PageModel در همین فایل                                         *@
 @functions {
 
+    @* کلاس PageModel برای این صفحه                                    *@
     public class ListModel : PageModel {
+        @* فیلد خصوصی برای DataContext                                  *@
         private DataContext context;
 
+        @* ویژگی برای نگهداری لیست نام تأمین‌کنندگان                    *@
+        @* = Enumerable.Empty<string>(): مقدار پیش‌فرض، لیست خالی       *@
         public IEnumerable<string> Suppliers { get; set; } = Enumerable.Empty<string>();
 
+        @* سازنده                                                      *@
         public ListModel(DataContext ctx) {
             context = ctx;
         }
 
+        @* Handler مربوط به درخواست GET                                *@
         public void OnGet() {
+            @* Select: projection - فقط فیلد Name را از جدول Suppliers انتخاب می‌کند *@
+            @* نتیجه: IEnumerable<string> شامل نام تمام تأمین‌کنندگان    *@
             Suppliers = context.Suppliers.Select(s => s.Name);
         }
     }

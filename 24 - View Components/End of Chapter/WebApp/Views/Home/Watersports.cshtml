@@ -1,17 +1,36 @@
-﻿@model Product
+@* ================================================================= *@
+@* Views/Home/Watersports.cshtml - View نمایش محصول ورزش‌های آبی      *@
+@* ================================================================= *@
+@* این View نحوه‌ی استفاده از دستور switch در Razor و محاسبات را نشان می‌دهد. *@
+@* همچنین تفاوت بین Razor Code Block (@: ...) و Expression (@()) را نشان می‌دهد. *@
+@* ================================================================= *@
+
+@* @model: تعریف نوع Model - یک محصول                                  *@
+@model Product
+
+@* سند HTML کامل - این View از Layout استفاده نمی‌کند                  *@
 <!DOCTYPE html>
 <html>
 <head>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <h6 class="bg-secondary text-white text-center m-2 p-2">Watersports</h6>
+
     <div class="m-2">
+        @* جدول نمایش اطلاعات محصول                                       *@
+        @* data-id: HTML5 data attribute - برای ذخیره‌ی داده‌های سفارشی در HTML *@
+        @* این فیلد در JavaScript یا CSS قابل دسترسی است                 *@
         <table class="table table-sm table-striped table-bordered"
                data-id="@Model?.ProductId">
             <tbody>
+                @* سطر اول: نام محصول با استفاده از switch               *@
                 <tr><th>Name</th><td>
+                    @* switch: دستور شرطی چندحالته در Razor              *@
+                    @* Model?.Name: نام محصول (با null check)             *@
                     @switch (Model?.Name) {
+                        @* @:: Razor Text Literal - متن خام بدون HTML encoding *@
                         case "Kayak":
                             @:Small Boat
                             break;
@@ -19,12 +38,22 @@
                             @:Flotation Aid
                             break;
                         default:
+                            @* در حالت پیش‌فرض، نام محصول نمایش داده می‌شود *@
                             @Model?.Name
                             break;
                     }
                 </td></tr>
+
+                @* سطر دوم: قیمت محصول با فرمت ارز                      *@
                 <tr><th>Price</th><td>@Model?.Price.ToString("c")</td></tr>
+
+                @* سطر سوم: متن ایستا "Price * 0.2m" - محاسبه نمی‌شود!   *@
+                @* در Razor، محتوای داخل @(...) محاسبه می‌شود            *@
+                @* اما متن ساده فقط نمایش داده می‌شود                     *@
                 <tr><th>Tax</th><td>@Model?.Price * 0.2m</td></tr>
+
+                @* سطر چهارم: محاسبه‌ی واقعی مالیات با @( )              *@
+                @* @(Model?.Price * 0.2m): محاسبه و نمایش نتیجه          *@
                 <tr><th>Tax</th><td>@(Model?.Price * 0.2m)</td></tr>
             </tbody>
         </table>

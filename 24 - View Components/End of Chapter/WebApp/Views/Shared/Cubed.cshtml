@@ -1,21 +1,43 @@
-﻿<!DOCTYPE html>
+@* ================================================================= *@
+@* Views/Shared/Cubed.cshtml - View محاسبه‌ی مکعب                    *@
+@* ================================================================= *@
+@* این View مربوط به CubedController است.                              *@
+@* نحوه‌ی استفاده از TempData در Razor را نشان می‌دهد.                  *@
+@* TempData: داده‌هایی که فقط برای یک درخواست بعدی در دسترس هستند.      *@
+@* ================================================================= *@
+
+@* سند HTML کامل - Layout ندارد                                        *@
+<!DOCTYPE html>
 <html>
 <head>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <h6 class="bg-secondary text-white text-center m-2 p-2">Cubed</h6>
+
+    @* فرم ارسال عدد برای محاسبه‌ی مکعب                                  *@
+    @* method="get": ارسال فرم با روش GET (پارامترها در URL قرار می‌گیرند) *@
+    @* action="/cubed/cube": مسیر Action که فرم به آن ارسال می‌شود        *@
     <form method="get" action="/cubed/cube" class="m-2">
         <div class="form-group">
             <label>Value</label>
+            @* فیلد ورودی عدد                                            *@
+            @* value="@(TempData["value"])"': مقدار قبلی از TempData (اگر وجود داشته باشد) *@
             <input name="num" class="form-control" value="@(TempData["value"])" />
         </div>
+        @* دکمه‌ی ارسال فرم                                             *@
         <button class="btn btn-primary mt-1" type="submit">Submit</button>
     </form>
+
+    @* نمایش نتیجه (اگر TempData["result"] وجود داشته باشد)             *@
+    @* TempData بعد از خوانده شدن حذف می‌شود (به طور پیش‌فرض)            *@
     @if (TempData["result"] != null) {
+        @* نمایش پیام نتیجه با استفاده از مقادیر TempData               *@
         <div class="bg-info text-white m-2 p-2">
+            @* @TempData["..."]: خواندن مقدار از TempData                 *@
             The cube of @TempData["value"] is @TempData["result"]
         </div>
-    } 
+    }
 </body>
 </html>

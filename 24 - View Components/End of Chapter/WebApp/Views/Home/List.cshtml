@@ -1,22 +1,48 @@
-﻿@model IEnumerable<Product>
+@* ================================================================= *@
+@* Views/Home/List.cshtml - View نمایش لیست محصولات                  *@
+@* ================================================================= *@
+@* این View مربوط به HomeController.List() است.                       *@
+@* نحوه‌ی استفاده از Partial View و متدهای LINQ در Razor را نشان می‌دهد. *@
+@* ================================================================= *@
+
+@* @model: تعریف نوع Model - لیستی از محصولات                          *@
+@model IEnumerable<Product>
+
+@* Razor Block برای تنظیم Layout و محاسبات                             *@
 @{
+    @* Layout = null: این View از هیچ Layout استفاده نمی‌کند            *@
     Layout = null;
+
+    @* محاسبه‌ی میانگین قیمت محصولات با استفاده از LINQ                  *@
+    @* Average(p => p.Price): میانگین قیمت را محاسبه می‌کند              *@
+    @* ?? 0: اگر Model null باشد، مقدار پیش‌فرض 0 استفاده می‌شود        *@
     decimal average = Model?.Average(p => p.Price) ?? 0;
 }
+
+@* سند HTML کامل                                                      *@
 <!DOCTYPE html>
 <html>
 <head>
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <h6 class="bg-secondary text-white text-center m-2 p-2">Products</h6>
+
     <div class="m-2">
+        @* جدول محصولات با سرصفحه (thead)                                *@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr><th>Name</th><th>Price</th></tr>
             </thead>
             <tbody>
+                @* حلقه روی محصولات                                       *@
+                @* Model ?? Enumerable.Empty<Product>(): محافظت در برابر null *@
                 @foreach (Product p in Model ?? Enumerable.Empty<Product>()) {
+                    @* <partial>: استفاده از Partial View                *@
+                    @* name="_RowPartial": نام Partial View               *@
+                    @* model="p": پاس دادن محصول فعلی به عنوان Model    *@
+                    @* با استفاده از Partial View، می‌توانیم منطق نمایش سطر را به فایل جداگانه منتقل کنیم *@
                     <partial name="_RowPartial" model="p" />
                 }
             </tbody>

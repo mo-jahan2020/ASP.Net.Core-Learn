@@ -1,13 +1,31 @@
-﻿@model IEnumerable<City>
-@{  
+@* ================================================================= *@
+@* Views/Cities/Index.cshtml - View مربوط به CityController.Index()  *@
+@* ================================================================= *@
+@* این View مخصوص CitiesController است (الگوی MVC کلاسیک).              *@
+@* در الگوی MVC، Controller منطق را کنترل می‌کند و View فقط نمایش می‌دهد.*@
+@* ================================================================= *@
+
+@* @model: تعریف نوع Model این View                                    *@
+@*   IEnumerable<City>: لیستی از شهرها (که از Controller پاس داده شده)  *@
+@model IEnumerable<City>
+
+@* Razor Block برای تنظیم Layout                                       *@
+@*   Layout = "_ImportantLayout": استفاده از Layout سفارشی به نام _ImportantLayout *@
+@*   این Layout در Views/Shared قرار دارد                              *@
+@{
     Layout = "_ImportantLayout";
 }
 
+@* شروع div با margin                                                   *@
 <div class="m-2">
+    @* جدول نمایش لیست شهرها                                           *@
     <table class="table table-sm table-striped table-bordered">
         <tbody>
+            @* حلقه روی شهرها                                            *@
+            @* Model ?? Enumerable.Empty<City>(): اگر Model null بود، لیست خالی بده *@
             @foreach (City c in Model ?? Enumerable.Empty<City>()) {
                 <tr>
+                    @* نمایش اطلاعات هر شهر                             *@
                     <td>@c.Name</td>
                     <td>@c.Country</td>
                     <td>@c.Population</td>

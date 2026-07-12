@@ -1,12 +1,24 @@
-﻿@model CityViewModel
+@* ================================================================= *@
+@* CitiesPageHybrid/Default.cshtml - View مربوط به ViewComponent هیبریدی Page *@
+@* ================================================================= *@
+@* این View مربوط به ViewComponent "CitiesPageHybrid" است که              *@
+@* از PageModel "CitiesModel" ساخته شده (ترکیب Page و ViewComponent).    *@
+@* ساختار آن مشابه CitiesControllerHybrid است اما نام متفاوتی دارد.   *@
+@* ================================================================= *@
 
+@* @model: نوع Model - CityViewModel                                   *@
+@model CityViewModel
+
+@* جدول نمایش خلاصه - همان ساختار جدول Hybrid Controller              *@
 <table class="table table-sm table-bordered text-white bg-dark">
     <thead><tr><th colspan="2">Hybrid Page Summary</th></tr></thead>
     <tbody>
+        @* نمایش تعداد شهرها                                            *@
         <tr>
             <td>Cities:</td>
             <td class="text-right">@Model?.Cities</td>
         </tr>
+        @* نمایش جمعیت با فرمت هزارگان                                  *@
         <tr>
             <td>Population:</td>
             <td class="text-right">

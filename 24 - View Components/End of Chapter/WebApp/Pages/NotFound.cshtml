@@ -1,8 +1,17 @@
-﻿@page "/noid"
+@* ================================================================= *@
+@* NotFound.cshtml - صفحه‌ی نمایش لیست محصولات در صورت پیدا نکردن     *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page با مسیر سفارشی "/noid"                      *@
+@*   به جای مسیر پیش‌فرض /NotFound، این صفحه در آدرس /noid قابل دسترسی است *@
+@* @model: مشخص کردن PageModel                                          *@
+@* @using: اضافه کردن فضاهای نام                                        *@
+@page "/noid"
 @model NotFoundModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using WebApp.Models;
 
+@* سند HTML                                                            *@
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,28 +19,44 @@
     <title>Not Found</title>
 </head>
 <body>
+    @* پیام اصلی                                                       *@
     <div class="bg-primary text-white text-center m-2 p-2">No Matching ID</div>
+
+    @* لیست محصولات موجود                                               *@
     <ul class="list-group m-2">
+        @* حلقه روی تمام محصولات و نمایش نام و شناسه‌ی آن‌ها            *@
         @foreach (Product p in Model.Products) {
-            <li class="list-group-item">@p.Name (ID: @p.ProductId)</li>                
+            @* هر محصول در یک آیتم لیست با فرمت "Name (ID: x)" نمایش داده می‌شود *@
+            <li class="list-group-item">@p.Name (ID: @p.ProductId)</li>
         }
-    </ul>    
+    </ul>
 </body>
 </html>
 
+@* تعریف PageModel در همین فایل (به جای فایل جداگانه .cshtml.cs)        *@
 @functions {
 
+    @* کلاس PageModel برای این صفحه                                    *@
     public class NotFoundModel: PageModel {
+        @* فیلد خصوصی برای DataContext                                  *@
         private DataContext context;
 
-        public IEnumerable<Product> Products { get; set; } 
+        @* ویژگی برای نگهداری لیست محصولات                              *@
+        @* = Enumerable.Empty<Product>(): مقدار پیش‌فرض، لیست خالی      *@
+        public IEnumerable<Product> Products { get; set; }
             = Enumerable.Empty<Product>();
 
+        @* سازنده                                                      *@
         public NotFoundModel(DataContext ctx) {
             context = ctx;
         }
 
+        @* Handler مربوط به درخواست GET                                *@
+        @* توجه: نام این متد OnGetAsync است اما نوع بازگشتی void دارد! *@
+        @*   این یک اشکال در کد اصلی است - باید async Task باشد        *@
+        @*   برای استفاده از await، نوع بازگشتی باید Task باشد          *@
         public void OnGetAsync(long id = 1) {
+            @* دریافت تمام محصولات از پایگاه داده                       *@
             Products = context.Products;
         }
     }

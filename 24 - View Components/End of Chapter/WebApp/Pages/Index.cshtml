@@ -1,5 +1,22 @@
-﻿@page "{id:long?}"
+@* ================================================================= *@
+@* Index.cshtml - View مربوط به Razor Page اصلی                      *@
+@* ================================================================= *@
+@* Razor Page ترکیبی از View و Controller در یک فایل است.              *@
+@* صفحه‌ی Index در آدرس /Index (یا /extra/page/{id}) در دسترس است.    *@
+@* ================================================================= *@
+
+@* @page: این دستور، فایل را به یک Razor Page تبدیل می‌کند            *@
+@*   "{id:long?}": محدودیت مسیر - id اختیاری و از نوع long است         *@
+@* @model: مشخص کردن کلاس PageModel مربوط به این صفحه                 *@
+@page "{id:long?}"
 @model IndexModel
 
+@* نمایش نام محصول در یک div با کلاس‌های بوت‌استرپ                    *@
+@* @Model: دسترسی به PageModel                                          *@
+@* ?. عملگر null-conditional - اگر Product null باشد، null نمایش داده می‌شود *@
 <div class="bg-primary text-white text-center m-2 p-2">@Model.Product?.Name</div>
+
+@* استفاده از Partial View به نام _ProductPartial                     *@
+@* model="Model.Product": پاس دادن Product به عنوان مدل به Partial     *@
+@* Partial View برای نمایش بخشی از UI به صورت قابل استفاده‌ی مجدد است *@
 <partial name="_ProductPartial" model="Model.Product" />

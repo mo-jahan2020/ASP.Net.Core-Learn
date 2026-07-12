@@ -1,30 +1,61 @@
-﻿@page "{id:long}"
+@* ================================================================= *@
+@* Editor.cshtml - صفحه‌ی ویرایش محصول                                *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page با پارامتر اجباری id از نوع long             *@
+@*   "{id:long}": id باید از نوع long باشد (نه اختیاری، باید وجود داشته باشد) *@
+@* @model: مشخص کردن PageModel                                          *@
+@page "{id:long}"
 @model EditorModel
-@{ 
+
+@* Razor Block برای تنظیم Layout                                        *@
+@*   Layout = null: این صفحه از Layout پیش‌فرض استفاده نمی‌کند           *@
+@*   یعنی ساختار HTML به طور کامل در همین فایل تعریف می‌شود             *@
+@{
     Layout = null;
 }
 
+@* شروع سند HTML                                                       *@
 <!DOCTYPE html>
 <html>
 <head>
+    @* بارگذاری CSS بوت‌استرپ از wwwroot/lib/bootstrap                    *@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* عنوان صفحه                                                       *@
     <div class="bg-primary text-white text-center m-2 p-2">Editor</div>
+
     <div class="m-2">
+        @* جدول نمایش اطلاعات محصول                                       *@
         <table class="table table-sm table-striped table-bordered">
             <tbody>
+                @* سطر اول: نام محصول                                    *@
                 <tr><th>Name</th><td>@Model.Product?.Name</td></tr>
+                @* سطر دوم: قیمت فعلی محصول                              *@
                 <tr><th>Price</th><td>@Model.Product?.Price</td></tr>
             </tbody>
         </table>
+
+        @* فرم HTML برای ویرایش قیمت                                     *@
+        @* method="post": ارسال فرم با روش HTTP POST                     *@
+        @* وقتی فرم ارسال شود، OnPostAsync در PageModel فراخوانی می‌شود  *@
         <form method="post">
+            @* AntiForgeryToken: تولید توکن امنیتی CSRF                  *@
+            @*   این توکن از حملات Cross-Site Request Forgery جلوگیری می‌کند *@
+            @*   به طور خودکار اعتبارسنجی می‌شود                          *@
             @Html.AntiForgeryToken()
+
+            @* فیلد ورودی قیمت                                           *@
             <div class="form-group">
                 <label>Price</label>
-                <input name="price" class="form-control" 
+                @* name="price": نام فیلد که در Handler دریافت می‌شود   *@
+                @* value="...": مقدار اولیه از Product فعلی               *@
+                <input name="price" class="form-control"
                        value="@Model.Product?.Price" />
             </div>
+
+            @* دکمه‌ی ارسال فرم                                          *@
             <button class="btn btn-primary mt-2" type="submit">Submit</button>
         </form>
     </div>

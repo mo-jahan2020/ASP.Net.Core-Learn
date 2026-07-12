@@ -1,13 +1,35 @@
-﻿@page
+@* ================================================================= *@
+@* Data.cshtml - صفحه‌ای که از @inject برای دسترسی به سرویس‌ها استفاده می‌کند *@
+@* ================================================================= *@
+@* این صفحه نحوه‌ی تزریق مستقیم سرویس‌ها به Razor Page را نشان می‌دهد.    *@
+@* با استفاده از @inject می‌توان بدون نیاز به PageModel، به سرویس‌ها      *@
+@* دسترسی داشت (مثل DataContext). این روش برای صفحات ساده مناسب است.    *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page                                              *@
+@* @inject: تزریق سرویس DataContext به این View                        *@
+@*   DataContext: نوع سرویس                                              *@
+@*   context: نام متغیر برای استفاده در View                              *@
+@*   ; در انتها: پایان دستور Razor                                       *@
+@page
 @inject DataContext context;
 
+@* عنوان بخش دسته‌بندی‌ها                                                *@
 <h5 class="bg-primary text-white text-center m-2 p-2">Categories</h5>
+
+@* لیست بوت‌استرپی برای نمایش دسته‌بندی‌ها                                *@
 <ul class="list-group m-2">
+    @* حلقه روی تمام دسته‌بندی‌های موجود در پایگاه داده                  *@
+    @* context.Categories: DbSet مربوط به Category که IEnumerable است     *@
     @foreach (Category c in context.Categories) {
-        <li class="list-group-item">@c.Name</li>                
+        @* هر دسته‌بندی به صورت یک آیتم لیست نمایش داده می‌شود            *@
+        <li class="list-group-item">@c.Name</li>
     }
 </ul>
 
+@* یک div اطلاعاتی (info) برای نمایش خلاصه‌ی ViewComponent هیبریدی       *@
+@* <vc:cities-controller-hybrid />: فراخوانی ViewComponent سفارشی        *@
+@*   این Tag Helper، ViewComponent "CitiesControllerHybrid" را فراخوانی می‌کند *@
 <div class="bg-info text-white m-2 p-2">
-    <vc:cities-controller-hybrid  />	
+    <vc:cities-controller-hybrid  />
 </div>

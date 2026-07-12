@@ -1,11 +1,24 @@
-﻿@page
+@* ================================================================= *@
+@* Cities.cshtml - View مربوط به صفحه‌ی شهرها                         *@
+@* ================================================================= *@
+
+@* @page: تعریف Razor Page (بدون پارامتر اضافی)                       *@
+@* @model: نوع PageModel مورد استفاده در این صفحه                     *@
+@*   WebApp.Pages.CitiesModel: کلاس PageModel هیبریدی                *@
+@page
 @model WebApp.Pages.CitiesModel
 
+@* شروع یک div با کلاس margin بوت‌استرپ                               *@
 <div class="m-2">
+    @* تعریف یک جدول بوت‌استرپ (table-sm, table-striped, table-bordered) *@
     <table class="table table-sm table-striped table-bordered">
         <tbody>
+            @* حلقه‌ی foreach برای پیمایش شهرها                           *@
+            @* Model.Data?.Cities: داده‌های شهرها از PageModel             *@
+            @* ?? Enumerable.Empty<City>(): اگر null بود، لیست خالی بده   *@
             @foreach (City c in Model.Data?.Cities ?? Enumerable.Empty<City>()) {
                 <tr>
+                    @* نمایش اطلاعات هر شهر در یک سلول جدول              *@
                     <td>@c.Name</td>
                     <td>@c.Country</td>
                     <td>@c.Population</td>

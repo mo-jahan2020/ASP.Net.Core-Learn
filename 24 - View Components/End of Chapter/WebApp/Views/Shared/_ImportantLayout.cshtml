@@ -1,11 +1,26 @@
-﻿<!DOCTYPE html>
+@* ================================================================= *@
+@* Views/Shared/_ImportantLayout.cshtml - یک Layout سفارشی            *@
+@* ================================================================= *@
+@* این Layout برای Viewهای مهم (Important) استفاده می‌شود.                *@
+@* در Views/Cities/Index.cshtml با Layout = "_ImportantLayout" تنظیم شده. *@
+@* تفاوت با Layout اصلی: ظاهر متفاوت (هشدار مهم)                        *@
+@* ================================================================= *@
+
+@* سند HTML کامل                                                       *@
+<!DOCTYPE html>
 <html>
 <head>
+    @* عنوان صفحه از ViewBag.Title                                      *@
     <title>@ViewBag.Title</title>
+
+    @* بارگذاری CSS بوت‌استرپ                                          *@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+    @* هشدار مهم با پس‌زمینه‌ی زرد (warning)                            *@
     <h3 class="bg-warning text-white text-center p-2 m-2">Important</h3>
+
+    @* @RenderBody(): محتوای View اختصاصی در اینجا رندر می‌شود           *@
     @RenderBody()
 </body>
 </html>

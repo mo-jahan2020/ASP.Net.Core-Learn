@@ -1,12 +1,28 @@
-﻿@model CityViewModel
+@* ================================================================= *@
+@* CitiesControllerHybrid/Default.cshtml - View پیش‌فرض ViewComponent *@
+@* ================================================================= *@
+@* این View مربوط به ViewComponent "CitiesControllerHybrid" است.        *@
+@* ViewComponentها در فولدر Views/Shared/Components/[Name]/ جستجو می‌شوند. *@
+@* نام View پیش‌فرض "Default.cshtml" است.                                *@
+@* این View خلاصه‌ای از شهرها را به صورت جدول نمایش می‌دهد.              *@
+@* ================================================================= *@
 
+@* @model: نوع Model - CityViewModel                                   *@
+@*   این Model همان چیزی است که در CitiesController.Invoke() ساخته شده *@
+@model CityViewModel
+
+@* جدول نمایش خلاصه - با پس‌زمینه‌ی تیره و متن سفید                    *@
 <table class="table table-sm table-bordered text-white bg-dark">
+    @* سرصفحه                                                         *@
     <thead><tr><th colspan="2">Hybrid Controller Summary</th></tr></thead>
     <tbody>
+        @* نمایش تعداد شهرها                                            *@
         <tr>
             <td>Cities:</td>
             <td class="text-right">@Model?.Cities</td>
         </tr>
+        @* نمایش جمعیت با فرمت هزارگان (مثلاً 1,000,000)               *@
+        @* "#,###": جدا کردن هزارگان با کاما                            *@
         <tr>
             <td>Population:</td>
             <td class="text-right">

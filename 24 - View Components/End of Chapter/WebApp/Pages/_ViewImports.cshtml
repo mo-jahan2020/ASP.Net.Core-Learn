@@ -1,4 +1,23 @@
-﻿@namespace WebApp.Pages
+@* ================================================================= *@
+@* _ViewImports.cshtml - تنظیمات سراسری برای Razor Pages              *@
+@* ================================================================= *@
+@* این فایل برای اعمال تنظیمات مشترک به تمام Razor Pageها استفاده می‌شود. *@
+@* تنظیمات این فایل به طور خودکار به تمام Viewهای موجود در فولدر اعمال می‌شود. *@
+@* می‌توان آن را در هر سطحی (root یا sub-folder) قرار داد.                *@
+@* ================================================================= *@
+
+@* @namespace: تنظیم namespace پیش‌فرض برای صفحات                       *@
+@*   این namespace برای کلاس‌های PageModel تولیدشده استفاده می‌شود       *@
+@namespace WebApp.Pages
+
+@* @using: اضافه کردن فضای نام مدل‌ها به صورت سراسری                    *@
+@*   با این کار، در تمام Viewها می‌توان بدون using، به مدل‌ها دسترسی داشت *@
 @using WebApp.Models
+
+@* @addTagHelper: ثبت Tag Helperهای داخلی ASP.NET Core                 *@
+@*   این Tag Helperها امکاناتی مثل <partial>, <environment> و ... را فراهم می‌کنند *@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@* @addTagHelper: ثبت Tag Helperهای مربوط به پروژه‌ی خودمان            *@
+@*   این شامل Tag Helperهای ViewComponent سفارشی مثل <vc:city-summary /> می‌شود *@
 @addTagHelper *, WebApp

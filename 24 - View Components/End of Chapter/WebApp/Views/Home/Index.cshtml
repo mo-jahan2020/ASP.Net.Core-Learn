@@ -1,28 +1,62 @@
-﻿@model Product
-@{  
+@* ================================================================= *@
+@* Views/Home/Index.cshtml - View اصلی برنامه (MVC)                   *@
+@* ================================================================= *@
+@* این View مربوط به HomeController.Index() است.                       *@
+@* نحوه‌ی استفاده از Sections، ViewBag و ViewComponentها را نشان می‌دهد.*@
+@* Sections بخش‌های اختیاری هستند که در Layout رندر می‌شوند.             *@
+@* ================================================================= *@
+
+@* @model: تعریف نوع Model - یک محصول (Product)                        *@
+@model Product
+
+@* Razor Block برای تنظیمات اولیه                                       *@
+@{
+    @* Layout = "_Layout": استفاده از Layout اصلی                       *@
     Layout = "_Layout";
+
+    @* ?? "Product Table": اگر ViewBag.Title تنظیم نشده باشد، مقدار پیش‌فرض "Product Table" *@
+    @* ?? عملگر null-coalescing: اگر مقدار سمت چپ null باشد، مقدار سمت راست استفاده می‌شود *@
     ViewBag.Title = ViewBag.Title ?? "Product Table";
 }
 
+@* @section Header: تعریف یک Section به نام Header                     *@
+@*   این Section در Layout در جایی که @RenderSection("Header", false) باشد، رندر می‌شود *@
+@*   پارامتر false یعنی این Section اختیاری است (اگر تعریف نشود، خطا نمی‌دهد) *@
 @section Header {
     Product Information
 }
 
+@* نمایش اطلاعات محصول در سطرهای جدول                                  *@
+@* این محتوا در Layout در جایی که @RenderBody() باشد، رندر می‌شود        *@
 <tr><th>Name</th><td>@Model?.Name</td></tr>
 <tr>
     <th>Price</th>
+    @* Price.ToString("c"): قالب‌بندی قیمت به صورت ارز                  *@
+    @* "c" = Currency Format - استفاده از فرمت ارز فعلی سیستم (مثلاً $، ﷼، €) *@
     <td>@Model?.Price.ToString("c")</td>
 </tr>
 <tr><th>Category ID</th><td>@Model?.CategoryId</td></tr>
-        
+
+@* @section Footer: تعریف Section برای پاورقی                         *@
+@*   محاسبه‌ی درصد قیمت محصول نسبت به میانگین                            *@
 @section Footer {
-    @(((Model?.Price / ViewBag.AveragePrice) 
+    @* ViewBag.AveragePrice در HomeController.Index() تنظیم شده است     *@
+    @* F2 = Fixed-point با 2 رقم اعشار                                  *@
+    @(((Model?.Price / ViewBag.AveragePrice)
         * 100).ToString("F2"))% of average price
 }
 
+@* @section Summary: تعریف Section برای خلاصه                          *@
+@*   این Section شامل ViewComponentها برای نمایش اطلاعات اضافی است      *@
 @section Summary {
     <div class="bg-info text-white m-2 p-2">
+        @* <vc:city-summary />: فراخوانی ViewComponent CitySummary      *@
+        @* theme-name="secondary": پارامتر themeName با مقدار "secondary" *@
+        @* این پارامتر در متد Invoke(string themeName) دریافت می‌شود    *@
         <vc:city-summary theme-name="secondary" />
+
+        @* <vc:page-size />: فراخوانی ViewComponent PageSize             *@
+        @* این کامپوننت به صورت async کار می‌کند و اندازه‌ی صفحه را برمی‌گرداند *@
         <vc:page-size />
     </div>
 }

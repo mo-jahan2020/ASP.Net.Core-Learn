@@ -1,25 +1,66 @@
-﻿{
+{
+  // =====================================================================
+  // launchSettings.json - تنظیمات اجرای برنامه (Visual Studio / dotnet run)
+  // =====================================================================
+  // این فایل تنظیمات مربوط به اجرای برنامه در محیط توسعه را مشخص می‌کند.
+  // توسط Visual Studio، VS Code و دستور "dotnet run" استفاده می‌شود.
+  // این فایل معمولاً در فولدر Properties قرار می‌گیرد
+  // و در محیط Production استفاده نمی‌شود.
+  // =====================================================================
+
+  // iisSettings: تنظیمات مربوط به IIS Express (سرور وب ویندوزی)
   "iisSettings": {
+    // windowsAuthentication: فعال‌سازی احراز هویت ویندوزی (false = غیرفعال)
     "windowsAuthentication": false,
+
+    // anonymousAuthentication: اجازه‌ی دسترسی ناشناس (true = فعال)
     "anonymousAuthentication": true,
+
+    // iisExpress: تنظیمات خاص IIS Express
     "iisExpress": {
+      // applicationUrl: آدرس URL برنامه
       "applicationUrl": "http://localhost:5000",
+
+      // sslPort: پورت SSL (0 = غیرفعال، یعنی فقط HTTP)
       "sslPort": 0
     }
   },
+
+  // profiles: پروفایل‌های مختلف اجرا (هر کدام تنظیمات متفاوتی دارند)
   "profiles": {
+    // پروفایل "WebApp": اجرای مستقیم پروژه با Kestrel (سرور داخلی دات‌نت)
     "WebApp": {
+      // commandName: دستور اجرا
+      // "Project" یعنی اجرای مستقیم پروژه (با dotnet run)
       "commandName": "Project",
+
+      // dotnetRunMessages: نمایش پیام‌های اضافی dotnet run
       "dotnetRunMessages": true,
-      "launchBrowser": false,
+
+      // launchBrowser: باز کردن خودکار مرورگر پس از اجرا (false = باز نمی‌شود)
+      "launchBrowser": true,
+
+      // applicationUrl: آدرس URL برنامه
       "applicationUrl": "http://localhost:5000",
+
+      // environmentVariables: متغیرهای محیطی
       "environmentVariables": {
+        // ASPNETCORE_ENVIRONMENT: محیط اجرا (Development = محیط توسعه)
+        // این متغیر تعیین می‌کند که کدام فایل appsettings خوانده شود
+        // و رفتار برنامه در حالت Development/Production/Staging چگونه باشد
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+
+    // پروفایل "IIS Express": اجرای برنامه با IIS Express
     "IIS Express": {
+      // commandName: "IISExpress" یعنی اجرا با IIS Express
       "commandName": "IISExpress",
+
+      // launchBrowser: باز کردن خودکار مرورگر (true = باز می‌شود)
       "launchBrowser": true,
+
+      // environmentVariables: محیط Development تنظیم شده است
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

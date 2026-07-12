@@ -1,2 +1,17 @@
-﻿@model long
+@* ================================================================= *@
+@* PageSize/Default.cshtml - View مربوط به ViewComponent PageSize     *@
+@* ================================================================= *@
+@* این View توسط PageSize ViewComponent رندر می‌شود.                     *@
+@* PageSize ViewComponent یک درخواست HTTP به apress.com ارسال می‌کند    *@
+@* و Content-Length (اندازه‌ی پاسخ) را برمی‌گرداند.                       *@
+@* ================================================================= *@
+
+@* @model: نوع Model - long                                             *@
+@*   این مقدار Content-Length صفحه‌ی apress.com است (تعداد بایت‌ها)     *@
+@model long
+
+@* نمایش اندازه‌ی صفحه در یک div                                       *@
+@* m-1 p-1: margin و padding کوچک                                      *@
+@* bg-light: پس‌زمینه‌ی روشن                                           *@
+@* text-dark: متن تیره                                                  *@
 <div class="m-1 p-1 bg-light text-dark">Page size: @Model</div>
