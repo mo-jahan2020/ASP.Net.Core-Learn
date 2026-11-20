@@ -1,0 +1,151 @@
+@model SsoServer.Web.ViewModels.Admin.SaveClientViewModel
+@using SsoServer.Domain.Enums
+@{
+    var isEdit = ViewContext.RouteData.Values["action"]?.ToString() == "ClientEdit";
+    ViewBag.Title = isEdit ? $"ویرایش کلاینت {Model.ClientId}" : "ثبت کلاینت جدید";
+}
+<h5 class="page-title">@ViewBag.Title</h5>
+<div class="card">
+    <div class="card-body">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <form asp-controller="Admin" asp-action="@(isEdit ? "ClientEdit" : "ClientCreate")" method="post">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">شناسه کلاینت (ClientId)</label>
+                    @if (isEdit)
+                    {
+                        <input class="form-control ltr-inline w-100" value="@Model.ClientId" disabled />
+                        <input type="hidden" asp-for="ClientId" />
+                    }
+                    else
+                    {
+                        <input asp-for="ClientId" class="form-control ltr-inline w-100" dir="ltr" autocomplete="off" />
+                    }
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">نام نمایشی (لاتین)</label>
+                    <input asp-for="DisplayName" class="form-control" dir="ltr" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">نام نمایشی فارسی</label>
+                    <input asp-for="PersianDisplayName" class="form-control" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">مالک / واحد</label>
+                    <input asp-for="Owner" class="form-control" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">نوع کلاینت</label>
+                    <input type="hidden" asp-for="Kind" value="@((int)ClientKind.Confidential)" />
+                    <input class="form-control" value="@AppStrings.KindConfidential" readonly title="برای امنیت سامانه، همه کلاینت‌ها باید Confidential (با Client Secret) باشند." />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">توضیحات</label>
+                    <input asp-for="Description" class="form-control" />
+                </div>
+            </div>
+
+            <h6 class="mb-3">جریان‌های مجاز</h6>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="FlowValues" id="flow-code" value="@((int)ClientFlow.AuthorizationCode)" checked="@Model.HasFlow(ClientFlow.AuthorizationCode)" />
+                        <label class="form-check-label" for="flow-code">@AppStrings.FlowAuthorizationCode <span class="text-danger">(PKCE همیشه الزامی است)</span></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="FlowValues" id="flow-refresh" value="@((int)ClientFlow.RefreshToken)" checked="@Model.HasFlow(ClientFlow.RefreshToken)" />
+                        <label class="form-check-label" for="flow-refresh">@AppStrings.FlowRefreshToken</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="FlowValues" id="flow-password" value="@((int)ClientFlow.Password)" checked="@Model.HasFlow(ClientFlow.Password)" />
+                        <label class="form-check-label" for="flow-password">@AppStrings.FlowPassword <span class="text-danger">(فقط Confidential)</span></label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="FlowValues" id="flow-cc" value="@((int)ClientFlow.ClientCredentials)" checked="@Model.HasFlow(ClientFlow.ClientCredentials)" />
+                        <label class="form-check-label" for="flow-cc">@AppStrings.FlowClientCredentials <span class="text-danger">(فقط Confidential)</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="mb-3">اسکوپ‌های مجاز</h6>
+            <div class="row mb-3">
+                @foreach (var scope in SsoServer.Domain.Models.SsoScopes.All)
+                {
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="ScopeValues" id="scope-@scope" value="@scope" checked="@Model.HasScope(scope)" />
+                            <label class="form-check-label" for="scope-@scope">
+                                @(scope switch
+                                {
+                                    "openid" => AppStrings.ScopeOpenId,
+                                    "profile" => AppStrings.ScopeProfile,
+                                    "roles" => AppStrings.ScopeRoles,
+                                    "email" => AppStrings.ScopeEmail,
+                                    "api" => AppStrings.ScopeApi,
+                                    "offline_access" => AppStrings.ScopeOfflineAccess,
+                                    _ => scope
+                                })
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">@Html.DisplayNameFor(m => m.RedirectUris)</label>
+                    <textarea asp-for="RedirectUris" class="form-control" rows="4" dir="ltr" placeholder="http://localhost:5002/signin-oidc"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">@Html.DisplayNameFor(m => m.PostLogoutRedirectUris)</label>
+                    <textarea asp-for="PostLogoutRedirectUris" class="form-control" rows="4" dir="ltr" placeholder="http://localhost:5002/signout-callback-oidc"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">الزام تأیید کاربر (Consent)</label>
+                    <select asp-for="RequireConsent" class="form-select">
+                        <option value="">پیش‌فرض سراسری</option>
+                        <option value="true">همیشه بپرس</option>
+                        <option value="false">هرگز نپرس</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3 d-flex align-items-end">
+                    <div class="form-check">
+                        <input asp-for="Enabled" class="form-check-input" />
+                        <label asp-for="Enabled" class="form-check-label">کلاینت فعال باشد</label>
+                    </div>
+                </div>
+                @if (!isEdit)
+                {
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Client Secret (الزامی — همین مقدار را به برنامه کلاینت بدهید؛ خالی باشد خودکار ساخته و فقط یک‌بار نمایش داده می‌شود)</label>
+                        <input asp-for="ClientSecret" class="form-control" dir="ltr" autocomplete="off" minlength="16" required />
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@AppStrings.BtnSave</button>
+                <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Clients">@AppStrings.BtnCancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (isEdit && Model.Kind == ClientKind.Confidential)
+{
+    <div class="card mt-4">
+        <div class="card-header">بازتولید Client Secret</div>
+        <div class="card-body">
+            <p class="text-muted">با بازتولید Secret، مقدار قبلی بی‌اعتبار می‌شود. مقدار جدید فقط یک بار نمایش داده خواهد شد.</p>
+            <form asp-controller="Admin" asp-action="ClientRegenerateSecret" method="post" data-confirm="Secret جدید ساخته شود؟ مقدار قبلی بلافاصله بی‌اعتبار می‌شود.">
+                <input type="hidden" name="id" value="@Model.ClientId" />
+                <button type="submit" class="btn btn-warning">بازتولید Secret</button>
+            </form>
+        </div>
+    </div>
+}

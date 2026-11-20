@@ -123,7 +123,7 @@ app.MapControllers();
 // نکته: این روش در برنامه‌های واقعی توصیه نمی‌شود. بهتر است از Extension Method
 // مشابه app.MigrateDatabase() استفاده کنید.
 var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataContext>();
-SeedData.SeedDatabase(context);
+//SeedData.SeedDatabase(context);
 //Data Source=.;Initial Catalog=SportsStore;Integrated Security=True;Trust Server Certificate=True
 //Data Source=.;Initial Catalog=SportsStore;Integrated Security=True;Trust Server Certificate=True
 

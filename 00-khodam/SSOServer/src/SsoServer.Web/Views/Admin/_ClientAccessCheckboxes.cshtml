@@ -1,0 +1,47 @@
+@*
+    Client-access checkboxes shared by UserCreate and UserEdit.
+    Empty selection = no restriction (the user may access every enabled client);
+    at least one ticked client = the user may only access those clients.
+*@
+@model SsoServer.Web.ViewModels.Admin.ClientAccessCheckboxesViewModel
+@{
+    var selected = Model.Selected.ToHashSet(StringComparer.Ordinal);
+    var allChecked = Model.Clients.Count > 0 && Model.Clients.All(c => selected.Contains(c.ClientId));
+}
+<h6 class="mt-2 mb-2">دسترسی به برنامه‌ها (کلاینت‌ها)</h6>
+<div class="alert alert-info small mb-3">
+    اگر هیچ برنامه‌ای انتخاب نشود، این کاربر به <strong>همه برنامه‌های فعال</strong> دسترسی خواهد داشت و برنامه‌هایی که بعداً ثبت می‌شوند هم خودکار مجاز خواهند بود.
+    با انتخاب حداقل یک برنامه، دسترسی کاربر فقط به همین برنامه‌های انتخاب‌شده محدود می‌شود و ورود او به برنامه‌های دیگر رد خواهد شد.
+    نقش «مدیر سامانه» همیشه بدون محدودیت به همه برنامه‌ها دسترسی دارد.
+</div>
+@if (Model.Clients.Count == 0)
+{
+    <p class="text-muted mb-3">هنوز کلاینتی در سامانه ثبت نشده است؛ در نتیجه کاربر محدودیتی نخواهد داشت.</p>
+}
+else
+{
+    <div class="row" data-client-checks>
+        <div class="col-12 mb-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" data-toggle-checks="[data-client-checks]" id="client-check-all" checked="@allChecked" />
+                <label class="form-check-label fw-bold" for="client-check-all">انتخاب / پاک‌کردن همه</label>
+            </div>
+        </div>
+        @foreach (var client in Model.Clients)
+        {
+            <div class="col-md-4 mb-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="SelectedClientIds" id="client-@client.ClientId" value="@client.ClientId" checked="@(selected.Contains(client.ClientId))" />
+                    <label class="form-check-label" for="client-@client.ClientId">
+                        @client.PersianDisplayName
+                        <span class="ltr-inline text-muted small">@client.ClientId</span>
+                        @if (!client.Enabled)
+                        {
+                            <span class="badge text-bg-secondary">غیرفعال</span>
+                        }
+                    </label>
+                </div>
+            </div>
+        }
+    </div>
+}

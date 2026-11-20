@@ -1,0 +1,35 @@
+@page "/Suppliers"
+@model Code_Generation1.Pages.Suppliers.IndexModel
+@{
+	ViewData["Title"] = "Suppliers";
+}
+
+<h1>Suppliers</h1>
+<p>
+	<a asp-page="/Suppliers/Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>SupplierId</th>
+			<th>Name</th>
+			<th>City</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Suppliers)
+		{
+			<tr>
+				<td>@item.SupplierId</td>
+				<td>@item.Name</td>
+				<td>@item.City</td>
+				<td>
+					<a asp-page="/Suppliers/Edit" asp-route-id="@item.SupplierId">Edit</a> |
+					<a asp-page="/Suppliers/Details" asp-route-id="@item.SupplierId">Details</a> |
+					<a asp-page="/Suppliers/Delete" asp-route-id="@item.SupplierId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

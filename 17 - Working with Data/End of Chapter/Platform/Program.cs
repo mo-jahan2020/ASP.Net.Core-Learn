@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // افزودن سرویس کش توزیع‌شده (Distributed Cache) مبتنی بر SQL Server
-builder.Services.AddDistributedSqlServerCache(opts => {
+builder.Services.AddDistributedSqlServerCache(opts =>
+{
     // خواندن رشته اتصال به دیتابیس کش از تنظیمات برنامه
     opts.ConnectionString
         = builder.Configuration["ConnectionStrings:CacheConnection"];
@@ -22,7 +23,8 @@ builder.Services.AddResponseCaching();
 builder.Services.AddSingleton<IResponseFormatter, HtmlResponseFormatter>();
 
 // ثبت CalculationContext (DbContext) برای اتصال به دیتابیس محاسبات با استفاده از SQL Server
-builder.Services.AddDbContext<CalculationContext>(opts => {
+builder.Services.AddDbContext<CalculationContext>(opts =>
+{
     opts.UseSqlServer(builder.Configuration["ConnectionStrings:CalcConnection"]);
     // فعال‌سازی لاگ‌گیری اطلاعات حساس (فقط مناسب محیط توسعه)
     opts.EnableSensitiveDataLogging(true);
@@ -42,20 +44,23 @@ app.UseResponseCaching();
 app.MapEndpoint<Platform.SumEndpoint>("/sum/{count:int=1000000000}");
 
 // تعریف یک Endpoint ساده برای مسیر ریشه "/" که پیام Hello World برمی‌گرداند
-app.MapGet("/", async context => {
+app.MapGet("/", async context =>
+{
     await context.Response.WriteAsync("Hello World!");
 });
 
 // بررسی اینکه آیا از طریق آرگومان خط فرمان INITDB درخواست مقداردهی اولیه دیتابیس شده است
 bool cmdLineInit = (app.Configuration["INITDB"] ?? "false") == "true";
 // اگر محیط اجرا Development باشد یا مقداردهی اولیه از خط فرمان درخواست شده باشد
-if (app.Environment.IsDevelopment() || cmdLineInit) {
+if (app.Environment.IsDevelopment() || cmdLineInit)
+{
     // دریافت سرویس SeedData از کانتینر تزریق وابستگی
     var seedData = app.Services.GetRequiredService<SeedData>();
     // اجرای عملیات مقداردهی اولیه (Seed) دیتابیس
     seedData.SeedDatabase();
 }
 // اگر برنامه فقط برای مقداردهی اولیه دیتابیس اجرا نشده باشد، سرور را اجرا کن
-if (!cmdLineInit) {
+if (!cmdLineInit)
+{
     app.Run();
 }

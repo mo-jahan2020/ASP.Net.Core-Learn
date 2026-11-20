@@ -1,0 +1,21 @@
+@model string
+@{
+    // صفحه‌ی واسط «ورود موفق» — به‌جای 302 مستقیم بعد از POST لاگین.
+    // دلیل: برخی مرورگرها زنجیره‌ی POST → 302 → 302 (authorize → redirect_uri
+    // در پورت/origin دیگر) را کامل دنبال نمی‌کنند و روی صفحه‌ی لاگین «فریز»
+    // می‌شوند تا وقتی کاربر F5 بزند. با این صفحه، ناوبری به authorize با یک
+    // GET خالصِ سمت کلاینت شروع می‌شود که همه‌ی مرورگرها دنبالش می‌کنند.
+    // توجه: CSP سرور script-src 'self' است، پس از meta refresh استفاده می‌کنیم
+    // (بدون جاوااسکریپت) به‌علاوه دکمه‌ی «ادامه» به‌عنوان fallback.
+    ViewBag.Title = "ورود با موفقیت انجام شد";
+    var target = string.IsNullOrEmpty(Model) ? "/Manage" : Model;
+}
+<meta http-equiv="refresh" content="0;url=@Html.Raw(target)" />
+<div class="card centered-card">
+    <div class="card-body text-center p-5">
+        <div class="spinner-border text-primary mb-3" role="status"></div>
+        <h3 class="mb-3">ورود با موفقیت انجام شد</h3>
+        <p class="text-muted">در حال انتقال… اگر به‌صورت خودکار منتقل نشدید، دکمه‌ی زیر را بزنید.</p>
+        <a class="btn btn-primary" href="@target">ادامه</a>
+    </div>
+</div>

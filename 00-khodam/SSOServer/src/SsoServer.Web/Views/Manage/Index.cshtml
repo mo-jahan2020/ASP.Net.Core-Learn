@@ -1,0 +1,72 @@
+@model SsoServer.Web.ViewModels.Manage.ProfileViewModel
+@{
+    ViewBag.Title = AppStrings.NavProfile;
+}
+<h5 class="page-title">@AppStrings.NavProfile</h5>
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">اطلاعات حساب</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">نام نمایشی</dt>
+                    <dd class="col-sm-8">@Model.DisplayName</dd>
+                    <dt class="col-sm-4">نام کاربری</dt>
+                    <dd class="col-sm-8 ltr-inline">@Model.UserName</dd>
+                    <dt class="col-sm-4">ایمیل</dt>
+                    <dd class="col-sm-8 ltr-inline">@Model.Email</dd>
+                    <dt class="col-sm-4">نقش‌ها</dt>
+                    <dd class="col-sm-8">
+                        @foreach (var role in Model.Roles)
+                        {
+                            <span class="badge text-bg-info">@role</span>
+                        }
+                    </dd>
+                    <dt class="col-sm-4">تاریخ عضویت</dt>
+                    <dd class="col-sm-8">@Model.CreatedAt.LocalDateTime.ToString("yyyy/MM/dd HH:mm")</dd>
+                </dl>
+                @if (Model.Claims.Count > 0)
+                {
+                    <hr />
+                    <h6 class="mb-3">کلیم‌های سفارشی (در توکن‌ها قرار می‌گیرند)</h6>
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr><th>نوع</th><th>مقدار</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model.Claims)
+                            {
+                                <tr>
+                                    <td class="ltr-inline">@claim.Type</td>
+                                    <td class="ltr-inline">@claim.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">تغییر رمز عبور</div>
+            <div class="card-body">
+                <form asp-controller="Manage" asp-action="ChangePassword" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">رمز عبور فعلی</label>
+                        <input name="CurrentPassword" type="password" class="form-control" autocomplete="current-password" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رمز عبور جدید (حداقل ۸ کاراکتر شامل حرف بزرگ، رقم و علامت)</label>
+                        <input name="NewPassword" type="password" class="form-control" autocomplete="new-password" minlength="8" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">تکرار رمز عبور جدید</label>
+                        <input name="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">@AppStrings.BtnSave</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

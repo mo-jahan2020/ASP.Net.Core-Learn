@@ -1,0 +1,26 @@
+@using Microsoft.Extensions.Primitives
+@{
+    ViewBag.Title = AppStrings.LogoutHeader;
+    Layout = "_Layout";
+}
+<div class="login-wrapper">
+    <div class="card">
+        <div class="card-body p-4">
+            <h5 class="page-title mb-3">@AppStrings.LogoutHeader</h5>
+            <p class="text-muted">@AppStrings.LogoutIntro</p>
+            <form asp-controller="Authorization" asp-action="Logout" method="post">
+                @* Flow the end-session parameters so the confirm action can honor them. *@
+                @foreach (var parameter in Context.Request.HasFormContentType
+                    ? (IEnumerable<KeyValuePair<string, StringValues>>)Context.Request.Form
+                    : Context.Request.Query)
+                {
+                    <input type="hidden" name="@parameter.Key" value="@parameter.Value" />
+                }
+                <div class="d-grid gap-2 d-md-flex">
+                    <button type="submit" class="btn btn-danger flex-fill">@AppStrings.LogoutConfirm</button>
+                    <a class="btn btn-outline-secondary flex-fill" asp-controller="Home" asp-action="Index">@AppStrings.LogoutKeep</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

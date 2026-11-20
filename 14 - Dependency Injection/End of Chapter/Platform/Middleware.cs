@@ -29,6 +29,7 @@ namespace Platform
         // متد Invoke (یا InvokeAsync) به صورت قراردادی توسط Pipeline برای هر درخواست فراخوانی می‌شود.
         public async Task Invoke(HttpContext context)
         {
+            //http://localhost:5000/?custom=true
             if (context.Request.Method == HttpMethods.Get && context.Request.Query["custom"] == "true")
             {
                 // بررسی این‌که پاسخ هنوز شروع به ارسال نکرده باشد، پیش از تنظیم Header ها (مثل ContentType).
@@ -66,6 +67,7 @@ namespace Platform
         {
             // اگر مسیر درخواست دقیقاً "/location" باشد، پاسخ مستقیم داده می‌شود
             // و دیگر به Middleware/Endpoint بعدی منتقل نمی‌شود (Short-Circuit کردن Pipeline).
+            //http://localhost:5000/location
             if (context.Request.Path == "/location")
             {
                 await context.Response.WriteAsync($"{options.CityName}, {options.CountryName}\n");

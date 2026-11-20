@@ -1,0 +1,24 @@
+﻿
+
+@page
+@model Startup_Proj.Views.Home.IndexModel
+@using Startup_Proj.Models;
+@{
+    string Title = "ASP.Net Core Sample";
+Personel personel = new Personel(){Name="Ali hadi",DateOfBirth=Convert.ToDateTime("1990-01-01")};
+
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@Title</title>
+        <meta charset="utf-8" />
+        </head>
+    <body>
+        <h1>Hello @personel.Name</h1>
+        <input type="text" id="name" value="@personel.Name" />
+        <input type="date" id="dateOfBirth" value="@personel.DateOfBirth.ToString("yyyy-MM-dd")" />
+        <h1>Today is @DateTime.Now.ToString("yyyy-MM-dd")</h1>
+        <h3>Today is @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+    </body>
+    </html>

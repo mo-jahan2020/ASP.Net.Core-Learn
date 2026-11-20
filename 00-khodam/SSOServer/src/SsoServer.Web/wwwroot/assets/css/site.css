@@ -1,0 +1,1119 @@
+/* SsoServer - fully offline assets. Fonts: Vazirmatn (OFL) served from wwwroot. */
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* =========================================================
+   Theme variables
+   ========================================================= */
+
+:root {
+    --sso-primary: #0d5c63;
+    --sso-primary-dark: #093e43;
+    --sso-primary-soft: #e7f3f2;
+    --sso-accent: #e0a458;
+
+    --sso-bg: #f3f7f9;
+    --sso-surface: #ffffff;
+    --sso-border: #dbe5ea;
+    --sso-text: #17313a;
+    --sso-muted: #6b7c86;
+
+    --sso-danger: #dc3545;
+    --sso-danger-dark: #b02a37;
+
+    --sso-radius-lg: 1rem;
+    --sso-radius-md: .75rem;
+    --sso-shadow-sm: 0 4px 14px rgba(16, 42, 51, .06);
+    --sso-shadow-md: 0 12px 32px rgba(16, 42, 51, .10);
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+
+html,
+body {
+    font-family: 'Vazirmatn', Tahoma, 'Segoe UI', sans-serif;
+    font-size: 15px;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at top right, rgba(13, 92, 99, .10), transparent 34rem),
+        linear-gradient(180deg, #f8fbfc 0%, var(--sso-bg) 100%);
+    color: var(--sso-text);
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+a {
+    color: var(--sso-primary);
+    text-decoration: none;
+    transition: color .18s ease;
+}
+
+a:hover {
+    color: var(--sso-primary-dark);
+}
+
+.text-monospace-token,
+code.token,
+.token-reveal {
+    direction: ltr;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+    user-select: all;
+}
+
+/* =========================================================
+   Navbar
+   ========================================================= */
+
+.navbar-sso {
+    background-color: var(--sso-primary);
+}
+
+.navbar-sso .navbar-brand,
+.navbar-sso .nav-link,
+.navbar-sso .btn-link {
+    color: rgba(255, 255, 255, .92);
+}
+
+.navbar-sso .nav-link.active,
+.navbar-sso .nav-link:hover {
+    color: #fff;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Page title
+   ========================================================= */
+
+.page-title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    margin-bottom: 1.25rem;
+    padding-inline-start: .9rem;
+    color: var(--sso-text);
+    font-weight: 800;
+    letter-spacing: -.02em;
+}
+
+.page-title::before {
+    content: "";
+    width: .35rem;
+    height: 1.65rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--sso-primary), var(--sso-accent));
+    box-shadow: 0 4px 10px rgba(13, 92, 99, .25);
+}
+
+/* =========================================================
+   Cards & layout
+   ========================================================= */
+
+.card {
+    border: 1px solid rgba(219, 229, 234, .95);
+    border-radius: var(--sso-radius-lg);
+    background-color: rgba(255, 255, 255, .96);
+    box-shadow: var(--sso-shadow-sm);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%);
+    border-bottom: 1px solid var(--sso-border);
+    color: var(--sso-text);
+    font-weight: 800;
+}
+
+.centered-card {
+    max-width: 560px;
+    margin-inline: auto;
+}
+
+.narrow-card {
+    max-width: 720px;
+    margin-inline: auto;
+}
+
+/* =========================================================
+   Login page
+   ========================================================= */
+
+.login-wrapper {
+    max-width: 430px;
+    margin: 4rem auto;
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    color: var(--sso-primary);
+}
+
+.login-logo .logo-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--sso-primary);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Stat cards
+   ========================================================= */
+
+.stat-card {
+    position: relative;
+    isolation: isolate;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: .28rem;
+    background: linear-gradient(90deg, var(--sso-primary), var(--sso-accent));
+}
+
+.stat-card::after {
+    content: "";
+    position: absolute;
+    inset-block-start: -2.5rem;
+    inset-inline-end: -2.5rem;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background: rgba(13, 92, 99, .07);
+    z-index: -1;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(13, 92, 99, .25);
+    box-shadow: var(--sso-shadow-md);
+}
+
+.stat-card .card-body {
+    padding: 1.35rem 1rem;
+}
+
+.stat-card .stat-value {
+    font-size: clamp(1.8rem, 3vw, 2.35rem);
+    line-height: 1.15;
+    font-weight: 900;
+    color: var(--sso-primary);
+    letter-spacing: -.03em;
+}
+
+.stat-card .stat-label {
+    margin-top: .35rem;
+    color: var(--sso-muted);
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+/* =========================================================
+   Filter forms
+   ========================================================= */
+
+form.row.g-2.mb-3 {
+    position: relative;
+    margin-inline: 0;
+    padding: 1rem;
+    border: 1px solid var(--sso-border);
+    border-radius: var(--sso-radius-lg);
+    background: rgba(255, 255, 255, .92);
+    box-shadow: var(--sso-shadow-sm);
+}
+
+form.row.g-2.mb-3 .form-label {
+    margin-bottom: .4rem;
+    color: var(--sso-muted);
+    font-weight: 700;
+}
+
+form.row.g-2.mb-3 .form-control {
+    min-height: 2.65rem;
+    border-color: #ccd9df;
+    border-radius: .75rem;
+    background-color: #fbfdfd;
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+form.row.g-2.mb-3 .form-control::placeholder {
+    color: #9aa9b1;
+    font-size: .9rem;
+}
+
+form.row.g-2.mb-3 .form-control:focus {
+    border-color: var(--sso-primary);
+    background-color: #fff;
+    box-shadow: 0 0 0 .22rem rgba(13, 92, 99, .13);
+}
+
+form.row.g-2.mb-3 .btn {
+    min-height: 2.65rem;
+    padding-inline: 1.15rem;
+    border-radius: .75rem;
+    font-weight: 800;
+}
+
+form.row.g-2.mb-3 > .col-auto {
+    display: flex;
+    align-items: flex-end;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+.btn {
+    border-radius: .75rem;
+    font-weight: 700;
+    transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease, border-color .16s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    border-color: var(--sso-primary);
+    background: linear-gradient(135deg, var(--sso-primary), #11747c);
+    box-shadow: 0 8px 18px rgba(13, 92, 99, .18);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    border-color: var(--sso-primary-dark);
+    background: linear-gradient(135deg, var(--sso-primary-dark), var(--sso-primary));
+    box-shadow: 0 10px 22px rgba(13, 92, 99, .24);
+}
+
+.btn-outline-secondary {
+    color: #52636d;
+    border-color: #c8d4da;
+    background-color: #fff;
+}
+
+.btn-outline-secondary:hover {
+    color: var(--sso-text);
+    border-color: #aebdc5;
+    background-color: #f3f7f9;
+}
+
+.btn-danger {
+    border-color: var(--sso-danger);
+    background: linear-gradient(135deg, var(--sso-danger), #c82333);
+    box-shadow: 0 8px 18px rgba(220, 53, 69, .18);
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+    border-color: var(--sso-danger-dark);
+    background: linear-gradient(135deg, var(--sso-danger-dark), var(--sso-danger));
+    box-shadow: 0 10px 22px rgba(220, 53, 69, .24);
+}
+
+.session-card .btn {
+    min-width: 6rem;
+}
+
+/* =========================================================
+   Generic tables
+   ========================================================= */
+
+.table thead th {
+    background-color: #eef2f5;
+    color: #17313a;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* =========================================================
+   Grid card
+   ========================================================= */
+
+.grid-card {
+    width: 100%;
+    max-width: 100%;
+    border-color: rgba(13, 92, 99, .18);
+    box-shadow: var(--sso-shadow-md);
+    overflow: hidden;
+}
+
+.grid-card .card-body {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    border-radius: var(--sso-radius-lg);
+    overflow: hidden;
+}
+
+.grid-card .table-responsive {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: 68vh;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/* Scrollbar */
+.grid-card .table-responsive::-webkit-scrollbar {
+    width: .65rem;
+    height: .65rem;
+}
+
+.grid-card .table-responsive::-webkit-scrollbar-track {
+    background: #edf3f5;
+}
+
+.grid-card .table-responsive::-webkit-scrollbar-thumb {
+    background: #b8c9d0;
+    border-radius: 999px;
+}
+
+.grid-card .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #91aab3;
+}
+
+/* =========================================================
+   Improved grid / sso-grid
+   ========================================================= */
+
+.sso-grid {
+    --grid-border: #d5e1e7;
+    --grid-header-bg: #17313a;
+    --grid-header-fg: #ffffff;
+    --grid-row-alt: #f7fafb;
+    --grid-hover: #e8f4f2;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    margin-bottom: 0;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    color: var(--sso-text);
+}
+
+/* سرستون‌ها */
+.sso-grid thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: .68rem .55rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .16) !important;
+    border-inline-end: 1px solid rgba(255, 255, 255, .12);
+    background: linear-gradient(180deg, #1d3d47 0%, #17313a 100%);
+    color: var(--grid-header-fg);
+    font-size: .94rem;
+    line-height: 1.55;
+    font-weight: 800;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sso-grid thead th:first-child {
+    border-start-start-radius: var(--sso-radius-lg);
+}
+
+.sso-grid thead th:last-child {
+    border-start-end-radius: var(--sso-radius-lg);
+    border-inline-end: none;
+}
+
+/* سلول‌ها */
+.sso-grid tbody td {
+    padding: .62rem .55rem;
+    border-bottom: 1px solid #e3ebef;
+    border-inline-end: 1px solid #edf2f5;
+    background-color: #fff;
+    vertical-align: middle;
+    font-size: .98rem;
+    line-height: 1.65;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sso-grid tbody td:last-child {
+    border-inline-end: none;
+}
+
+.sso-grid tbody tr:nth-child(even) td {
+    background-color: var(--grid-row-alt);
+}
+
+.sso-grid tbody tr {
+    transition: background-color .15s ease, box-shadow .15s ease;
+}
+
+.sso-grid tbody tr:hover td {
+    background-color: var(--grid-hover);
+}
+
+.sso-grid tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.sso-grid tbody tr:last-child td:first-child {
+    border-end-start-radius: var(--sso-radius-lg);
+}
+
+.sso-grid tbody tr:last-child td:last-child {
+    border-end-end-radius: var(--sso-radius-lg);
+}
+
+/* ردیف‌های قابل کلیک */
+.sso-grid tbody tr.row-clickable {
+    cursor: pointer;
+}
+
+.sso-grid tbody tr.row-clickable:hover td:first-child {
+    box-shadow: inset 4px 0 0 rgba(13, 92, 99, .45);
+}
+
+.sso-grid tbody tr.row-selected td {
+    background-color: #dff0ed !important;
+    border-bottom-color: #c6ded9;
+}
+
+.sso-grid tbody tr.row-selected td:first-child {
+    box-shadow: inset 4px 0 0 var(--sso-primary);
+}
+
+/* sortable headers */
+.sso-grid thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sso-grid thead th.sortable::after {
+    content: '⇅';
+    display: inline-block;
+    margin-inline-start: .35rem;
+    opacity: .55;
+    font-size: .8em;
+}
+
+.sso-grid thead th.sortable:hover {
+    background: linear-gradient(180deg, #0d5c63 0%, #0a4c52 100%);
+}
+
+.sso-grid thead th.sort-asc::after {
+    content: '▲';
+    opacity: 1;
+}
+
+.sso-grid thead th.sort-desc::after {
+    content: '▼';
+    opacity: 1;
+}
+
+/* =========================================================
+   ستون‌بندی گرید نشست‌ها / Audit هفت‌ستونه
+   هدف:
+   - جدول از عرض باکس بیرون نزند
+   - زمان‌ها یک‌خطی بمانند
+   - جزئیات و دامنه‌ها فضای انعطاف‌پذیر داشته باشند
+   ========================================================= */
+
+#sessionsGrid,
+#auditGrid,
+.grid-card .sso-grid {
+    table-layout: fixed;
+}
+
+/* ستون 1: کاربر */
+#sessionsGrid th:nth-child(1),
+#sessionsGrid td:nth-child(1),
+#auditGrid th:nth-child(1),
+#auditGrid td:nth-child(1) {
+    width: 11%;
+}
+
+/* ستون 2: کلاینت */
+#sessionsGrid th:nth-child(2),
+#sessionsGrid td:nth-child(2),
+#auditGrid th:nth-child(2),
+#auditGrid td:nth-child(2) {
+    width: 15%;
+}
+
+/* ستون 3: نوع نشست / وضعیت */
+#sessionsGrid th:nth-child(3),
+#sessionsGrid td:nth-child(3),
+#auditGrid th:nth-child(3),
+#auditGrid td:nth-child(3) {
+    width: 10%;
+}
+
+/* ستون‌های 4 و 5 و 6: زمان‌ها */
+#sessionsGrid th:nth-child(4),
+#sessionsGrid td:nth-child(4),
+#sessionsGrid th:nth-child(5),
+#sessionsGrid td:nth-child(5),
+#sessionsGrid th:nth-child(6),
+#sessionsGrid td:nth-child(6),
+#auditGrid th:nth-child(4),
+#auditGrid td:nth-child(4),
+#auditGrid th:nth-child(5),
+#auditGrid td:nth-child(5),
+#auditGrid th:nth-child(6),
+#auditGrid td:nth-child(6) {
+    width: 14%;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: .92rem;
+    letter-spacing: -.025em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ستون 7: دامنه‌ها / جزئیات */
+#sessionsGrid th:nth-child(7),
+#sessionsGrid td:nth-child(7),
+#auditGrid th:nth-child(7),
+#auditGrid td:nth-child(7) {
+    width: 22%;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* حالت عمومی برای گریدهای هفت‌ستونه بدون id مشخص */
+.grid-card .sso-grid th:nth-child(1),
+.grid-card .sso-grid td:nth-child(1) {
+    width: 11%;
+}
+
+.grid-card .sso-grid th:nth-child(2),
+.grid-card .sso-grid td:nth-child(2) {
+    width: 15%;
+}
+
+.grid-card .sso-grid th:nth-child(3),
+.grid-card .sso-grid td:nth-child(3) {
+    width: 10%;
+}
+
+.grid-card .sso-grid th:nth-child(4),
+.grid-card .sso-grid td:nth-child(4),
+.grid-card .sso-grid th:nth-child(5),
+.grid-card .sso-grid td:nth-child(5),
+.grid-card .sso-grid th:nth-child(6),
+.grid-card .sso-grid td:nth-child(6) {
+    width: 14%;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: .92rem;
+    letter-spacing: -.025em;
+    font-variant-numeric: tabular-nums;
+}
+
+.grid-card .sso-grid th:nth-child(7),
+.grid-card .sso-grid td:nth-child(7) {
+    width: 22%;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================================
+   LTR values inside grids
+   ========================================================= */
+
+.ltr-inline {
+    direction: ltr;
+    display: inline-block;
+    text-align: left;
+    unicode-bidi: embed;
+}
+
+td.ltr-inline {
+    display: table-cell;
+    direction: ltr;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    font-size: .9rem;
+    line-height: 1.6;
+    color: #334b55;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+input.ltr-inline {
+    display: block;
+    width: 100%;
+    direction: ltr;
+    text-align: left;
+}
+
+/* =========================================================
+   Badges
+   ========================================================= */
+
+.badge {
+    border-radius: 999px;
+    padding: .38em .62em;
+    font-weight: 800;
+    letter-spacing: -.01em;
+}
+
+.sso-grid .badge {
+    max-width: 100%;
+    font-size: .82rem;
+    padding: .38em .62em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.sso-grid .badge.text-bg-primary,
+.session-detail-card .badge.text-bg-primary {
+    color: #08464c !important;
+    background-color: #d9efed !important;
+    border: 1px solid #b9ded9;
+}
+
+.sso-grid .badge.text-bg-secondary,
+.session-detail-card .badge.text-bg-secondary {
+    color: #41515a !important;
+    background-color: #edf2f5 !important;
+    border: 1px solid #d7e0e5;
+}
+
+.scope-badge,
+.sso-grid .badge.text-bg-light,
+.session-detail-card .badge.text-bg-light {
+    margin: .12rem;
+    color: #31515a !important;
+    background-color: #f4f8fa !important;
+    border: 1px solid #d9e5ea;
+    font-family: 'Courier New', monospace;
+    font-size: .76rem;
+    direction: ltr;
+}
+
+.sso-grid .scope-badge {
+    max-width: 8.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* =========================================================
+   Empty state and helper text
+   ========================================================= */
+
+.sso-grid tbody td[colspan] {
+    width: auto !important;
+    padding: 2.25rem 1rem !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%) !important;
+    color: var(--sso-muted) !important;
+    font-weight: 700;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+.form-text.mt-2.mb-3 {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin-top: .8rem !important;
+    padding: .55rem .8rem;
+    border: 1px solid #d9e5ea;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, .75);
+    color: var(--sso-muted);
+    font-size: .86rem;
+}
+
+.form-text.mt-2.mb-3::before {
+    content: "ℹ";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background-color: var(--sso-primary-soft);
+    color: var(--sso-primary);
+    font-weight: 900;
+}
+
+/* =========================================================
+   Session detail panel
+   ========================================================= */
+
+.session-detail-card {
+    position: relative;
+    margin-top: 1rem !important;
+    border: 1px solid rgba(13, 92, 99, .28);
+    border-radius: var(--sso-radius-lg);
+    background-color: #ffffff;
+    box-shadow: var(--sso-shadow-md);
+    overflow: hidden;
+    animation: ssoDetailIn .22s ease-out;
+}
+
+.session-detail-card::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: .28rem;
+    background: linear-gradient(90deg, var(--sso-primary), var(--sso-accent));
+}
+
+.session-detail-card .card-header {
+    padding: 1rem 1.15rem;
+    background:
+        linear-gradient(135deg, rgba(13, 92, 99, .08), rgba(224, 164, 88, .10)),
+        #ffffff;
+    border-bottom: 1px solid var(--sso-border);
+}
+
+.session-detail-card .card-header span {
+    color: var(--sso-text);
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.session-detail-card .btn-close {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #f1f5f7;
+    opacity: .85;
+    transition: background-color .16s ease, opacity .16s ease, transform .16s ease;
+}
+
+.session-detail-card .btn-close:hover {
+    background-color: #e3ebef;
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.session-detail-card .card-body {
+    padding: 1.15rem;
+}
+
+.session-detail-card dl.row {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    margin-bottom: 1rem !important;
+    border: 1px solid var(--sso-border);
+    border-radius: .9rem;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.session-detail-card dt,
+.session-detail-card dd {
+    margin-bottom: 0;
+    padding: .78rem .95rem;
+    border-bottom: 1px solid #e7eef2;
+}
+
+.session-detail-card dt {
+    background-color: #f6f9fa;
+    color: #52636d;
+    font-size: .88rem;
+    font-weight: 800;
+}
+
+.session-detail-card dd {
+    background-color: #fff;
+    color: var(--sso-text);
+    font-weight: 600;
+}
+
+.session-detail-card dt:nth-last-of-type(1),
+.session-detail-card dd:nth-last-of-type(1) {
+    border-bottom: none;
+}
+
+.session-detail-card dd.ltr-inline {
+    display: block;
+    direction: ltr;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+}
+
+.session-detail-card form {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: .25rem;
+}
+
+.session-detail-card form .btn-danger {
+    min-width: 9rem;
+}
+
+/* =========================================================
+   Token reveal
+   ========================================================= */
+
+.token-reveal {
+    background-color: #f0f4f6;
+    border: 1px dashed #b9c6cd;
+    border-radius: .75rem;
+    padding: .85rem 1rem;
+}
+
+/* =========================================================
+   Footer / alerts / service status
+   ========================================================= */
+
+footer.sso-footer {
+    padding: 1rem 0;
+    color: #7b8794;
+    font-size: .85rem;
+    text-align: center;
+}
+
+.alert-dismissible .btn-close {
+    float: left;
+}
+
+.service-badge {
+    min-width: 5.5rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.service-detail {
+    min-height: 1.25rem;
+    word-break: break-word;
+}
+
+/* =========================================================
+   Animation
+   ========================================================= */
+
+@keyframes ssoDetailIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+    .sso-grid thead th {
+        font-size: .88rem;
+        padding: .62rem .45rem;
+    }
+
+    .sso-grid tbody td {
+        font-size: .92rem;
+        padding: .58rem .45rem;
+    }
+
+    #sessionsGrid th:nth-child(4),
+    #sessionsGrid td:nth-child(4),
+    #sessionsGrid th:nth-child(5),
+    #sessionsGrid td:nth-child(5),
+    #sessionsGrid th:nth-child(6),
+    #sessionsGrid td:nth-child(6),
+    #auditGrid th:nth-child(4),
+    #auditGrid td:nth-child(4),
+    #auditGrid th:nth-child(5),
+    #auditGrid td:nth-child(5),
+    #auditGrid th:nth-child(6),
+    #auditGrid td:nth-child(6),
+    .grid-card .sso-grid th:nth-child(4),
+    .grid-card .sso-grid td:nth-child(4),
+    .grid-card .sso-grid th:nth-child(5),
+    .grid-card .sso-grid td:nth-child(5),
+    .grid-card .sso-grid th:nth-child(6),
+    .grid-card .sso-grid td:nth-child(6) {
+        font-size: .84rem;
+        letter-spacing: -.04em;
+    }
+
+    .sso-grid .badge {
+        font-size: .76rem;
+    }
+
+    .sso-grid .scope-badge {
+        max-width: 6.5rem;
+        font-size: .7rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .page-title {
+        font-size: 1.05rem;
+        margin-bottom: 1rem;
+    }
+
+    .stat-card .card-body {
+        padding: 1.1rem .85rem;
+    }
+
+    form.row.g-2.mb-3 {
+        padding: .85rem;
+    }
+
+    form.row.g-2.mb-3 .col-auto {
+        width: 100%;
+    }
+
+    form.row.g-2.mb-3 .btn {
+        width: 100%;
+    }
+
+    .grid-card .table-responsive {
+        max-height: none;
+    }
+
+    /* مهم: دیگر min-width اجباری نداریم */
+    .sso-grid {
+        min-width: 0 !important;
+        table-layout: fixed;
+    }
+
+    .sso-grid thead th {
+        font-size: .78rem;
+        padding: .55rem .35rem;
+    }
+
+    .sso-grid tbody td {
+        font-size: .82rem;
+        padding: .52rem .35rem;
+    }
+
+    #sessionsGrid th:nth-child(4),
+    #sessionsGrid td:nth-child(4),
+    #sessionsGrid th:nth-child(5),
+    #sessionsGrid td:nth-child(5),
+    #sessionsGrid th:nth-child(6),
+    #sessionsGrid td:nth-child(6),
+    #auditGrid th:nth-child(4),
+    #auditGrid td:nth-child(4),
+    #auditGrid th:nth-child(5),
+    #auditGrid td:nth-child(5),
+    #auditGrid th:nth-child(6),
+    #auditGrid td:nth-child(6),
+    .grid-card .sso-grid th:nth-child(4),
+    .grid-card .sso-grid td:nth-child(4),
+    .grid-card .sso-grid th:nth-child(5),
+    .grid-card .sso-grid td:nth-child(5),
+    .grid-card .sso-grid th:nth-child(6),
+    .grid-card .sso-grid td:nth-child(6) {
+        font-size: .74rem;
+        letter-spacing: -.055em;
+    }
+
+    .sso-grid td.ltr-inline {
+        font-size: .76rem;
+    }
+
+    .sso-grid .badge {
+        font-size: .68rem;
+        padding: .32em .48em;
+    }
+
+    .sso-grid .scope-badge {
+        max-width: 4.8rem;
+        font-size: .64rem;
+    }
+
+    .session-detail-card .card-body {
+        padding: .9rem;
+    }
+
+    .session-detail-card dt {
+        border-bottom: none;
+        padding-bottom: .25rem;
+    }
+
+    .session-detail-card dd {
+        padding-top: .25rem;
+    }
+
+    .session-detail-card form {
+        justify-content: stretch;
+    }
+
+    .session-detail-card form .btn-danger {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   Accessibility
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
